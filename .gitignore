@@ -1,0 +1,9 @@
+/dist/
+out/
+/bin
+*.iml
+/.idea/workspace.xml
+/.idea/libraries
+/local.properties
+/build
+/captures
