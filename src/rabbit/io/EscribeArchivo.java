@@ -18,24 +18,24 @@
 
 package rabbit.io;
 
+import rabbit.ui.EditorUI;
+import rabbit.ui.CuadroDeDialogo;
+
+import java.io.*;
+import java.awt.*;
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class EscribeArchivo {
     private String nombreArchivo, arhivoRuta;
 
-    public EscribeArchivo () {}
+    private EditorUI parent;
+
+    public EscribeArchivo (EditorUI parent) {
+        this.parent = parent;
+    }
 
     public EscribeArchivo (String text) {
         guardarArchivoValidarExtension(null, text);
-    }
-
-    public EscribeArchivo (String archivoRuta, String text) {
-        guardarArchivoValidarExtension(archivoRuta, text);
     }
 
     public boolean guardarArchivo (String archivoRuta, String text) {
@@ -47,7 +47,8 @@ public class EscribeArchivo {
             setArhivoRuta(archivoRuta);
             setNombreArchivo(new File(archivoRuta).getName());
 
-            escribirArchivo(text, false);
+            String encoding = archivoRuta.endsWith(".sl") ? "latin1" : "UTF-8";
+            escribirArchivo(text, encoding);
 
             return true;
         } catch (IOException e) {
@@ -59,37 +60,17 @@ public class EscribeArchivo {
 
     public boolean guardarArchivo (String text) {
         JFileChooser save = new JFileChooser();
-        save.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                String path = f.getPath();
-                return f.isDirectory() || path.endsWith(".sl");
-            }
+        save.setPreferredSize(new Dimension(900, 500));
+        save.setFileFilter(new FiltroDeArchivo());
 
-            @Override
-            public String getDescription() {
-                return "Archivo SL [.sl]";
-            }
-        });
-
-        final int resp = save.showSaveDialog(null); //Obtener ruta en donde se guardara el archivo.
+        final int resp = save.showSaveDialog(parent); //Obtener ruta en donde se guardara el archivo.
         if (resp == JFileChooser.APPROVE_OPTION) {
             File file = save.getSelectedFile();
             if (!file.exists()) {
-                try {
-                    if (file.createNewFile()) { //TODO : Que hace este metodo.?
-                        //Guardar info del archivo.
-                        setNombreArchivo(file.getName()); //Se guarda el nombre del archivo.
-                        setArhivoRuta(file.getAbsolutePath()); //Se guarda la ruta del arhivo.
+                guardarArchivo(file.getAbsolutePath(), text);
 
-                        escribirArchivo(text, true);
-                        return true;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             } else {
-                JOptionPane.showMessageDialog(null, "Error al guardar el archivo. El archivo ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, "Error al guardar el archivo. El archivo ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -99,25 +80,16 @@ public class EscribeArchivo {
     public boolean guardarArchivoValidarExtension (String archivoRuta, String text) {
         if (archivoRuta == null) {
             JFileChooser save = new JFileChooser();
-            save.setFileFilter(new FileFilter() {
-                @Override
-                public boolean accept(File f) {
-                    String path = f.getPath();
-                    return f.isDirectory() || path.endsWith(".sl");
-                }
+            save.setDialogTitle("Nuevo archivo SL");
+            save.setPreferredSize(new Dimension(900, 500));
+            save.setFileFilter(new FiltroDeArchivo());
 
-                @Override
-                public String getDescription() {
-                    return "Archivo SL [.sl]";
-                }
-            });
-
-            final int resp = save.showSaveDialog(null); //Obtener ruta en donde se guardara el archivo.
+            final int resp = save.showSaveDialog(parent); //Obtener ruta en donde se guardara el archivo.
             if (resp == JFileChooser.APPROVE_OPTION) {
                 File file = save.getSelectedFile();
                 if (!file.exists()) {
                     try {
-                        if (file.createNewFile()) { //TODO : Que hace este metodo.?
+                        if (file.createNewFile()) {
                             //Añadir extensión si no posee.
                             if (file.getAbsolutePath().endsWith(".sl")) {
                                 setNombreArchivo(file.getName()); //Se guarda el nombre del archivo.
@@ -126,28 +98,31 @@ public class EscribeArchivo {
                                 setNombreArchivo(file.getName() + ".sl");
                                 setArhivoRuta(file.getAbsolutePath() + ".sl");
                             }
-                            escribirArchivo(text, true);
+
+                            escribirArchivo(text, "latin1");
                             return true;
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Error al guardar el archivo. El archivo ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+                    String [] opcion = {"Aceptar"};
+                    CuadroDeDialogo.mostrar(parent, "Error al guardar el archivo. El archivo ya existe.", "Error", opcion);
                 }
             }
         } else {
             guardarArchivo(archivoRuta, text);
+            return true;
         }
 
         return false;
     }
 
-    public void escribirArchivo (String text, boolean append) throws IOException {
+    public void escribirArchivo (String text, String enconding) throws IOException {
         BufferedWriter writer = null;
 
         try {
-            writer =  new BufferedWriter(new FileWriter(getArhivoRuta(), append));
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(getArhivoRuta()), enconding));
             writer.write(text);
 
         } catch (IOException ex) {
@@ -156,10 +131,6 @@ public class EscribeArchivo {
         } finally {
             if (writer != null) writer.close();
         }
-    }
-
-    public boolean arhivoGuardado () {
-        return nombreArchivo != null;
     }
 
     public void setNombreArchivo (String nombreArchivo) {

@@ -18,48 +18,52 @@
 
 package rabbit.io;
 
+import rabbit.ui.EditorUI;
+
+import java.awt.*;
 import java.io.*;
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 
 public class LeerArchivo {
     private String nombreArchivo, archivoRuta, text;
 
-    public LeerArchivo () {
+    public LeerArchivo (EditorUI parent) {
         JFileChooser open = new JFileChooser();
-        open.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                String path = f.getPath();
-                return f.isDirectory() || path.endsWith(".sl");
-            }
+        open.setPreferredSize(new Dimension(900, 500));
+        open.setFileFilter(new FiltroDeArchivo());
 
-            @Override
-            public String getDescription() {
-                return "Archivo SL [.sl]";
-            }
-        });
-
-        final int resp = open.showOpenDialog(null);
+        final int resp = open.showOpenDialog(parent);
         if (resp == JFileChooser.APPROVE_OPTION) {
             File file = open.getSelectedFile();
             nombreArchivo = file.getName();
             archivoRuta = file.getAbsolutePath();
 
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(file.getAbsoluteFile()));
-                String line;
-                StringBuilder textArchivo = new StringBuilder();
-                while ((line = reader.readLine()) != null) {
-                    textArchivo.append(line);
-                    textArchivo.append("\n");
-                }
-
-                text = textArchivo.toString();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            text = leer (archivoRuta);
         }
+    }
+
+    public static String leer (String ruta) {
+        StringBuilder text = new StringBuilder();
+
+        try {
+            BufferedReader reader = null;
+
+            try {
+                String encoding = ruta.endsWith(".sl") ? "latin1" : "UTF-8";
+                reader = new BufferedReader(new InputStreamReader(new FileInputStream(ruta), encoding));
+
+                int $char;
+                while (($char = reader.read()) > - 1)
+                    text.append((char) $char);
+
+            } finally {
+                if (reader != null) reader.close ();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return text.toString();
     }
 
     public String getNombreArchivo() {
