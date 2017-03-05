@@ -22,21 +22,15 @@ import java.awt.*;
 import javax.swing.text.*;
 
 public class EditorColor {
-    public static final int DARCULA = 0;
-    public static final int INTELLIJ = 1;
+    static final int INTELLIJ = 0;
+    static final int DARCULA = 1;
 
-    public static int tema;
+    static int tema;
 
-    AttributeSet defaultText;
-    AttributeSet keyword;
-    AttributeSet number;
-    AttributeSet string;
-    AttributeSet comment;
-    AttributeSet field;
-    AttributeSet method;
+    AttributeSet defaultText, keyword, number, string, comment, field, method;
 
-    public EditorColor (final int tema) {
-        this.tema = tema;
+    EditorColor (final int tema) {
+        EditorColor.tema = tema;
 
         StyleContext sc = StyleContext.getDefaultStyleContext();
 
