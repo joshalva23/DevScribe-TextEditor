@@ -84,7 +84,7 @@ public class DocumentoEstilo extends DefaultStyledDocument {
                     break;
 
                 case "\"":
-                    insertString(offs + 1, "\" ", a);
+                    insertString(offs + 1, ".\"", a);
                     textComponent.setCaretPosition(offs + 1);
                     break;
             }
@@ -135,16 +135,12 @@ public class DocumentoEstilo extends DefaultStyledDocument {
             setCharacterAttributes(limite [0] + matcher.start(group), matcher.group(group).length(), style, false);
     }
 
-    private void linea (int l1, int l2) {
+    private void linea (int l1, int l2) throws BadLocationException {
         limite [0] = poscInicioLinea(l1);
-        limite [1] = poscFinalLinea(l1);
-
-        while (limite [1] < l2)
-            //Obtengo posición final.
-            limite[1] = poscFinalLinea(limite[1] + 1);
+        limite [1] = poscFinalLinea(l2);
     }
 
-    private int poscInicioLinea (int posc) {
+    private int poscInicioLinea (int posc) throws BadLocationException {
         String text = texto();
 
         //Compruebo si el valor del parametro no es el primer elemento.
@@ -158,7 +154,7 @@ public class DocumentoEstilo extends DefaultStyledDocument {
         return 0;
     }
 
-    private int poscFinalLinea (int posc) {
+    private int poscFinalLinea (int posc) throws BadLocationException {
         String text = texto();
         int length = text.length();
 
