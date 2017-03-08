@@ -16,9 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package rabbit.ui;
+package rabbit.document.tool;
 
 import rabbit.io.ConfDeUsuario;
+import rabbit.ui.EditorColor;
 
 import javax.swing.text.*;
 import java.util.regex.Matcher;
@@ -37,12 +38,12 @@ public class DocumentoEstilo extends DefaultStyledDocument {
     private JTextComponent textComponent;
     private int [] limite = new int [2];
 
-    DocumentoEstilo (JTextComponent textComponent) {
+    public DocumentoEstilo (JTextComponent textComponent) {
         color = new EditorColor(ConfDeUsuario.getInt (KEY_TEMA));
         this.textComponent = textComponent;
     }
 
-    void actualizarColorDocumento(EditorColor color) {
+    public void actualizarColorDocumento(EditorColor color) {
         this.color = color;
     }
 

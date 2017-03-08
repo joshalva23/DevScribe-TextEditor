@@ -27,9 +27,9 @@ public class EditorColor {
 
     static int tema;
 
-    AttributeSet defaultText, keyword, number, string, comment, field, method;
+    public AttributeSet defaultText, keyword, number, string, comment, field, method;
 
-    EditorColor (final int tema) {
+    public EditorColor (final int tema) {
         EditorColor.tema = tema;
 
         StyleContext sc = StyleContext.getDefaultStyleContext();
