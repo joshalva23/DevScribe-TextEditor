@@ -37,7 +37,6 @@ public class DocumentoEstilo extends DefaultStyledDocument {
     private JTextComponent textComponent;
     private int [] limite = new int [2];
 
-
     DocumentoEstilo (JTextComponent textComponent) {
         color = new EditorColor(ConfDeUsuario.getInt (KEY_TEMA));
         this.textComponent = textComponent;
