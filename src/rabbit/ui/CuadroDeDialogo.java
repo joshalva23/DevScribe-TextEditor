@@ -27,8 +27,9 @@ import java.awt.event.WindowEvent;
 
 public class CuadroDeDialogo extends JDialog implements ActionListener {
     private int indexBoton;
+    public static final int INFORMACION = 0, ERROR = 1;
 
-    private CuadroDeDialogo(JFrame padre, String mens, String titulo, String[] opciones) {
+    private CuadroDeDialogo(JFrame padre, String mens, String titulo, String[] opciones, int tipoMens) {
         super(padre, true);
         setTitle(titulo);
         setResizable(false);
@@ -49,11 +50,25 @@ public class CuadroDeDialogo extends JDialog implements ActionListener {
         conf.weighty = 1.0;
         conf.insets = new Insets(30, 10, 30, 10);
 
+        JLabel icono;
+        if (tipoMens == INFORMACION)
+            icono = new JLabel(new ImageIcon(getClass().getResource("icono/dialogoPreg.png")));
+        else
+            icono = new JLabel(new ImageIcon(getClass().getResource("icono/dialogoError.png")));
+
+        add(icono, conf);
+
+        //Componente de la fila 0 columna 1.
+        conf.gridx = 1;
+        conf.insets = new Insets(30, 0, 30, 10);
+
         JLabel mensaje = new JLabel(mens);
         add(mensaje, conf);
 
         //Componente de la fila 1 columna 0.
+        conf.gridx = 0;
         conf.gridy = 1;
+        conf.gridwidth = 2;
         conf.weighty = 0.0;
         conf.weightx = 1.0;
         conf.insets = new Insets(0, 10, 10, 10);
@@ -62,7 +77,7 @@ public class CuadroDeDialogo extends JDialog implements ActionListener {
         add(panelBotones(opciones), conf);
 
         pack();
-        setLocationRelativeTo(padre); //Localizo el cuadro del dialogo en el medio de su padre.
+        setLocationRelativeTo(padre); //Localiza el cuadro de dialogo en el medio de su contenedor.
         setVisible(true);
     }
 
@@ -80,8 +95,8 @@ public class CuadroDeDialogo extends JDialog implements ActionListener {
         return panel;
     }
 
-    public static int mostrar(JFrame padre, String mens, String titulo, String[] opciones) {
-        return new CuadroDeDialogo(padre, mens, titulo, opciones).indexBoton;
+    public static int mostrar(JFrame padre, String mens, String titulo, String[] opciones, int tipoMens) {
+        return new CuadroDeDialogo(padre, mens, titulo, opciones, tipoMens).indexBoton;
     }
 
     @Override
