@@ -85,47 +85,47 @@ public class EditorUI extends JFrame {
     private void confBarraDeHerramientas () {
         EventosBarraHerr e = new EventosBarraHerr();
 
-        jbNuevoArchivo = new JButton("Nuevo archivo");
+        jbNuevoArchivo = new JButton(new ImageIcon(getClass().getResource("icono/archivo.png")));
         jbNuevoArchivo.setToolTipText("Nuevo archivo (Ctrl-N)");
         jbNuevoArchivo.setFocusable(false);
         jbNuevoArchivo.addActionListener(e);
 
-        jbAbrirArchivoNuevo = new JButton("Abrir");
+        jbAbrirArchivoNuevo = new JButton(new ImageIcon(getClass().getResource("icono/abrir.png")));
         jbAbrirArchivoNuevo.setToolTipText("Abrir (Ctrl+Mayús+O");
         jbAbrirArchivoNuevo.setFocusable(false);
         jbAbrirArchivoNuevo.addActionListener(e);
 
-        jbGuardarTodo = new JButton("Guardar todo");
+        jbGuardarTodo = new JButton(new ImageIcon(getClass().getResource("icono/guardarTodo.png")));
         jbGuardarTodo.setToolTipText("Guardar todo (Ctrl-T)");
         jbGuardarTodo.setFocusable(false);
         jbGuardarTodo.addActionListener(e);
 
-        jbCortar = new JButton("Cortar");
+        jbCortar = new JButton(new ImageIcon(getClass().getResource("icono/cortar.png")));
         jbCortar.setToolTipText("Cortar (Ctrl-X)");
         jbCortar.setFocusable(false);
         jbCortar.addActionListener(e);
 
-        jbCopiar = new JButton ("Copiar");
+        jbCopiar = new JButton (new ImageIcon(getClass().getResource("icono/copiar.png")));
         jbCopiar.setToolTipText("Copiar (Ctrl-C)");
         jbCopiar.setFocusable(false);
         jbCopiar.addActionListener(e);
 
-        jbPegar = new JButton ("Pegar");
+        jbPegar = new JButton (new ImageIcon(getClass().getResource("icono/pegar.png")));
         jbPegar.setToolTipText("Pegar (Ctrl-V)");
         jbPegar.setFocusable(false);
         jbPegar.addActionListener(e);
 
-        jbRehacer = new JButton("Rehacer");
+        jbRehacer = new JButton(new ImageIcon(getClass().getResource("icono/rehacer.png")));
         jbRehacer.setToolTipText("Rehacer (Ctrl-Y)");
         jbRehacer.setFocusable(false);
         jbRehacer.addActionListener(e);
 
-        jbDeshacer = new JButton ("Deshacer");
+        jbDeshacer = new JButton (new ImageIcon(getClass().getResource("icono/deshacer.png")));
         jbDeshacer.setToolTipText("Deshacer (Ctrl-Z)");
         jbDeshacer.setFocusable(false);
         jbDeshacer.addActionListener(e);
 
-        jbAyuda = new JButton("Ayuda");
+        jbAyuda = new JButton(new ImageIcon(getClass().getResource("icono/ayuda.png")));
         jbAyuda.setToolTipText("Ayuda");
         jbAyuda.setFocusable(false);
         jbAyuda.addActionListener(e);
@@ -180,10 +180,12 @@ public class EditorUI extends JFrame {
 
     private void confMenuEditar (JMenu menu) {
         jmiDeshacer = new JMenuItem("Deshacer");
+        jmiDeshacer.setIcon(new ImageIcon(getClass().getResource("icono/deshacer.png")));
         jmiDeshacer.setActionCommand("jmiDeshacer");
         jmiDeshacer.addActionListener(e);
 
         jmiRehacer = new JMenuItem("Rehacer");
+        jmiRehacer.setIcon(new ImageIcon(getClass().getResource("icono/rehacer.png")));
         jmiRehacer.setActionCommand("jmiRehacer");
         jmiRehacer.addActionListener(e);
 
@@ -191,14 +193,17 @@ public class EditorUI extends JFrame {
         actualizarMenuItem(false, false);
 
         jmiCopiar = new JMenuItem("Copiar");
+        jmiCopiar.setIcon(new ImageIcon(getClass().getResource("icono/copiar.png")));
         jmiCopiar.setActionCommand("jmiCopiar");
         jmiCopiar.addActionListener(e);
 
         jmiCortar = new JMenuItem("Cortar");
+        jmiCortar.setIcon(new ImageIcon(getClass().getResource("icono/cortar.png")));
         jmiCortar.setActionCommand("jmiCortar");
         jmiCortar.addActionListener(e);
 
         jmiPegar = new JMenuItem("Pegar");
+        jmiPegar.setIcon(new ImageIcon(getClass().getResource("icono/pegar.png")));
         jmiPegar.setActionCommand("jmiPegar");
         jmiPegar.addActionListener(e);
 
@@ -220,11 +225,13 @@ public class EditorUI extends JFrame {
         int fontSize = ConfDeUsuario.getInt(KEY_FUENTE_TAMANIO);
 
         jmiAumentarFuente = new JMenuItem("Aumentar fuente");
+        jmiAumentarFuente.setIcon(new ImageIcon(getClass().getResource("icono/zoomAum.png")));
         jmiAumentarFuente.setActionCommand("jmiAumentarFuente");
         jmiAumentarFuente.setEnabled(fontSize != 30);
         jmiAumentarFuente.addActionListener(e);
 
         jmiDisminuirFuente = new JMenuItem("Disminuir fuente");
+        jmiDisminuirFuente.setIcon(new ImageIcon(getClass().getResource("icono/zoomDism.png")));
         jmiDisminuirFuente.setActionCommand("jmiDisminuirFuente");
         jmiDisminuirFuente.setEnabled(fontSize != 8);
         jmiDisminuirFuente.addActionListener(e);
@@ -281,8 +288,13 @@ public class EditorUI extends JFrame {
 
     private void confMenuAyuda (JMenu menu) {
         jmiAyuda = new JMenuItem("Ayuda");
+        jmiAyuda.setIcon(new ImageIcon(getClass().getResource("icono/ayuda.png")));
+        jmiAyuda.addActionListener(e);
         jmiAyuda.setActionCommand("jmiAyuda");
+
         jmiAcercaDeRabbit = new JMenuItem("Acerca de Rabbit");
+        jmiAcercaDeRabbit.addActionListener(e);
+        jmiAcercaDeRabbit.setActionCommand("jmiAcercaDeRabbit");
 
         menu.add(jmiAyuda);
         menu.addSeparator();
@@ -291,10 +303,12 @@ public class EditorUI extends JFrame {
 
     private void confMenuArchivo (JMenu menu) {
         jmiNuevoArchivo = new JMenuItem("Nuevo archivo SL");
+        jmiNuevoArchivo.setIcon(new ImageIcon(getClass().getResource("icono/archivo.png")));
         jmiNuevoArchivo.setActionCommand("jmiNuevoArchivo");
         jmiNuevoArchivo.addActionListener(e);
 
         jmiAbrirArchivo = new JMenuItem("Abrir archivo");
+        jmiAbrirArchivo.setIcon(new ImageIcon(getClass().getResource("icono/abrir.png")));
         jmiAbrirArchivo.setActionCommand("jmiAbrirArchivo");
         jmiAbrirArchivo.addActionListener(e);
 
@@ -306,6 +320,7 @@ public class EditorUI extends JFrame {
         jmiGuardarComo.addActionListener(e);
 
         jmiGuardarTodo = new JMenuItem("Guardar todo");
+        jmiGuardarTodo.setIcon(new ImageIcon(getClass().getResource("icono/guardarTodo.png")));
         jmiGuardarTodo.setActionCommand("jmiGuardarTodo");
         jmiGuardarTodo.addActionListener(e);
 
@@ -337,7 +352,7 @@ public class EditorUI extends JFrame {
         //Etiqueta que guarda el nombre del archivo.
         JLabel nombreArchivo = new JLabel(editor.getNombreArchivo());
 
-        JLabel jlCerrar = new JLabel (new ImageIcon(getClass().getResource("icono/bug.png")));
+        final JLabel jlCerrar = new JLabel (new ImageIcon(getClass().getResource("icono/c1.png")));
         //Se guarda la ruta del archivo como identificador para cerrar la pestaña.
         jlCerrar.setName(editor.getArchivoRuta());
         jlCerrar.addMouseListener(new MouseAdapter() {
@@ -359,6 +374,16 @@ public class EditorUI extends JFrame {
                     }
                 }
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jlCerrar.setIcon (new ImageIcon(getClass().getResource("icono/c2.png")));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jlCerrar.setIcon (new ImageIcon(getClass().getResource("icono/c1.png")));
+            }
         });
         jpTab.add(nombreArchivo);
         jpTab.add(Box.createHorizontalStrut(5));
@@ -372,7 +397,7 @@ public class EditorUI extends JFrame {
             String message = "El archivo " + editor.getNombreArchivo() + " se ha modificado. Guardar los cambios?";
 
             String [] bt = {"Guardar", "No Guardar", "Cancelar"};
-            switch (CuadroDeDialogo.mostrar(this, message, "Guardar cambios", bt)) {
+            switch (CuadroDeDialogo.mostrar(this, message, "Guardar cambios", bt, CuadroDeDialogo.INFORMACION)) {
                 case 0 :
                     //TODO : Debo comprobar si se pudo guardar para cerrarlo.
                     new EscribeArchivo(this).guardarArchivo(editor.getArchivoRuta(), editor.getText());
@@ -461,7 +486,7 @@ public class EditorUI extends JFrame {
                 EditorDeTexto editor = list.get(0);
                 String message = "El archivo " + editor.getNombreArchivo() + " se ha modificado. Guardar los cambios?";
                 String [] bt = {"Guardar", "No Guardar", "Cancelar"};
-                switch (CuadroDeDialogo.mostrar(this, message, "Guardar cambios", bt)) {
+                switch (CuadroDeDialogo.mostrar(this, message, "Guardar cambios", bt, CuadroDeDialogo.INFORMACION)) {
                     case 0: //Guardar el archivo.
                         //TODO : Debo comprobar si se pudo guardar para cerrarlo.
                         new EscribeArchivo(this).guardarArchivo(editor.getArchivoRuta(), editor.getText());
@@ -706,155 +731,12 @@ public class EditorUI extends JFrame {
                             //Guardo configuración de usuario.
                             ConfDeUsuario.putBoolean(KEY_BARRA_HERRAMIENTAS, est);
                             break;
+
+                        case "jmiAyuda" :
+                            new Ayuda(EditorUI.this);
+                            break;
                     }
             }
-
-
-//            if (e.getSource() == jmiNuevoArchivo) {
-//                nuevoArchivo();
-//
-//            } else if (e.getSource() == jmiAbrirArchivo) {
-//               abrirArchivo();
-//
-//            } else {
-//                EditorDeTexto editor = (EditorDeTexto) jTabbedPane.getSelectedComponent();
-//
-//                if (e.getSource() == jmiGuardar) {
-//                    guardarArchivo(editor);
-//
-//                } else if (e.getSource() == jmiGuardarComo){
-//                    EscribeArchivo escribe = new EscribeArchivo(EditorUI.this);
-//                    if (escribe.guardarArchivo(editor.getText())) {
-//                        //Se actualiza el nombre de la pestaña.
-//                        tabUpdate(escribe.getNombreArchivo(), jTabbedPane.getSelectedIndex());
-//                        //Se agrega la ruta del archivo guardado.
-//                        editor.setArchivoRuta(escribe.getArhivoRuta());
-//                        //Nuevo nombre de archivo.
-//                        editor.setNombreArchivo(escribe.getNombreArchivo());
-//
-//                        //Se actualiza el identificador del archivo.
-//                        JPanel panel = (JPanel) jTabbedPane.getTabComponentAt(jTabbedPane.getSelectedIndex());
-//                        panel.getComponent(2).setName(escribe.getArhivoRuta());
-//                    }
-//
-//                } else if (e.getSource() == jmiGuardarTodo) {
-//                    guardarTodo();
-//
-//                } else if (e.getSource() == jmiCerrarPestania) {
-//                    tabClose(editor);
-//
-//                } else if (e.getSource() == jmiSalir) {
-//                    cerrarPrograma();
-//
-//                } else if (e.getSource() == jmiCopiar) {
-//                    editor.copiar();
-//
-//                } else if (e.getSource() == jmiCortar) {
-//                    editor.cortar();
-//
-//                } else if (e.getSource() == jmiPegar) {
-//                    editor.pegar();
-//
-//                } else if (e.getSource() == jmiSelecTodo) {
-//                    editor.seleccTodo();
-//
-//                } else if (e.getSource() == jmiRehacer) {
-//                    editor.rehacer();
-//
-//                } else if (e.getSource() == jmiDeshacer) {
-//                    editor.deshacer();
-//
-//                } else if (e.getSource() == jcbIntelliJ) {
-//                    if (jcbIntelliJ.isSelected() && EditorColor.tema == EditorColor.DARCULA) {
-//                        ConfDeUsuario.putInt(KEY_TEMA, EditorColor.INTELLIJ); //Se guarda nuevo tema.
-//
-//                        actTemaDeTodosLosEditores(EditorColor.INTELLIJ);
-//                    }
-//
-//                } else if (e.getSource() == jcbDarcula) {
-//                    if (jcbDarcula.isSelected() && EditorColor.tema == EditorColor.INTELLIJ) {
-//                        ConfDeUsuario.putInt(KEY_TEMA, EditorColor.DARCULA); //Se guarda nuevo tema.
-//
-//                        actTemaDeTodosLosEditores(EditorColor.DARCULA);
-//                    }
-//
-//                } else if (e.getSource() == jmiAumentarFuente) {
-//                    if (EditorDeTexto.fontSize < 30) {
-//                        EditorDeTexto.fontSize ++;
-//
-//                        actFuentDeTodosLosEditores();
-//
-//                        if (EditorDeTexto.fontSize == 30) jmiAumentarFuente.setEnabled(false);
-//
-//                        //Se guarda nuevo tamaño de fuente.
-//                        ConfDeUsuario.putInt(KEY_FUENTE_TAMANIO, EditorDeTexto.fontSize);
-//                    }
-//
-//                    if (!jmiDisminuirFuente.isEnabled()) jmiDisminuirFuente.setEnabled(true);
-//
-//                    //Configurar estado del menu item 'Restablecer tamaño'
-//                    if (EditorDeTexto.fontSize != 12) {
-//                        if (!jmiTamanioOriginal.isEnabled()) jmiTamanioOriginal.setEnabled(true);
-//
-//                    } else {
-//                        jmiTamanioOriginal.setEnabled(false);
-//                    }
-//
-//                } else if (e.getSource() == jmiDisminuirFuente) {
-//                    if (EditorDeTexto.fontSize > 8) {
-//                        EditorDeTexto.fontSize --;
-//
-//                        actFuentDeTodosLosEditores();
-//
-//                        if (EditorDeTexto.fontSize == 8) jmiDisminuirFuente.setEnabled(false);
-//
-//                        //Se guarda nuevo tamaño de fuente.
-//                        ConfDeUsuario.putInt(KEY_FUENTE_TAMANIO, EditorDeTexto.fontSize);
-//                    }
-//
-//                    if (!jmiAumentarFuente.isEnabled()) jmiAumentarFuente.setEnabled(true);
-//
-//                    //Configurar estado del menu item 'Restablecer tamaño'
-//                    if (EditorDeTexto.fontSize != 12) {
-//                        if (!jmiTamanioOriginal.isEnabled()) jmiTamanioOriginal.setEnabled(true);
-//
-//                    } else {
-//                        jmiTamanioOriginal.setEnabled(false);
-//                    }
-//
-//                } else if (e.getSource() == jmiTamanioOriginal) {
-//                    EditorDeTexto.fontSize = 12;
-//
-//                    actFuentDeTodosLosEditores();
-//
-//                    jmiTamanioOriginal.setEnabled(false);
-//                    if (!jmiAumentarFuente.isEnabled()) jmiAumentarFuente.setEnabled(true);
-//                    if (!jmiDisminuirFuente.isEnabled()) jmiDisminuirFuente.setEnabled(true);
-//
-//                    //Se guarda nuevo tamaño de fuente.
-//                    ConfDeUsuario.putInt(KEY_FUENTE_TAMANIO, EditorDeTexto.fontSize);
-//
-//                } else if (e.getSource() == jcbNumDeLineas) {
-//                    boolean state = jcbNumDeLineas.isSelected();
-//
-//                    ConfDeUsuario.putBoolean(KEY_NUM_LINEA, state);
-//
-//                    EditorDeTexto editorDeTexto;
-//                    for (int i = 0; i < jTabbedPane.getTabCount(); i ++) {
-//                        editorDeTexto = (EditorDeTexto) jTabbedPane.getComponentAt(i);
-//
-//                        editorDeTexto.habilitarNumLineas(state);
-//                    }
-//
-//                } else if (e.getSource() == jcbToolBar) {
-//                    boolean state = jcbToolBar.isSelected();
-//
-//                    jtb.setVisible(state);
-//
-//                    //Guardo configuración de usuario.
-//                    ConfDeUsuario.putBoolean(KEY_BARRA_HERRAMIENTAS, state);
-//                }
-//            }
         }
     }
 
@@ -889,7 +771,7 @@ public class EditorUI extends JFrame {
                     editor.pegar();
 
                 else if (e.getSource() == jbAyuda);
-                    //Hasta el momento no hace nada.
+                    new Ayuda(EditorUI.this);
             }
         }
     }
