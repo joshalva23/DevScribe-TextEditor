@@ -394,10 +394,7 @@ public class EditorUI extends JFrame {
 
     private void tabClose (EditorDeTexto editor) {
         if (editor.archivoModificado()) {
-            String message = "El archivo " + editor.getNombreArchivo() + " se ha modificado. Guardar los cambios?";
-
-            String [] bt = {"Guardar", "No Guardar", "Cancelar"};
-            switch (CuadroDeDialogo.mostrar(this, message, "Guardar cambios", bt, CuadroDeDialogo.INFORMACION)) {
+            switch (mostrarDialogoGuardarCambios(editor.getNombreArchivo())) {
                 case 0 :
                     //TODO : Debo comprobar si se pudo guardar para cerrarlo.
                     new EscribeArchivo(this).guardarArchivo(editor.getArchivoRuta(), editor.getText());
@@ -484,9 +481,7 @@ public class EditorUI extends JFrame {
         switch (list.size()) {
             case 1 :
                 EditorDeTexto editor = list.get(0);
-                String message = "El archivo " + editor.getNombreArchivo() + " se ha modificado. Guardar los cambios?";
-                String [] bt = {"Guardar", "No Guardar", "Cancelar"};
-                switch (CuadroDeDialogo.mostrar(this, message, "Guardar cambios", bt, CuadroDeDialogo.INFORMACION)) {
+                switch (mostrarDialogoGuardarCambios(editor.getNombreArchivo())) {
                     case 0: //Guardar el archivo.
                         //TODO : Debo comprobar si se pudo guardar para cerrarlo.
                         new EscribeArchivo(this).guardarArchivo(editor.getArchivoRuta(), editor.getText());
@@ -504,6 +499,13 @@ public class EditorUI extends JFrame {
                 if (resp == DialogoGuardarVarios.OPER_TERMINADA)
                     System.exit(0);
         }
+    }
+
+    private int mostrarDialogoGuardarCambios (String nombreArchivo) {
+        String message = "El archivo " + nombreArchivo + " se ha modificado. Guardar los cambios?";
+        String [] bt = {"Guardar", "No Guardar", "Cancelar"};
+
+        return CuadroDeDialogo.mostrar(this, message, "Guardar cambios", bt, CuadroDeDialogo.INFORMACION);
     }
 
     private void nuevoArchivo () {
