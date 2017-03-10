@@ -70,7 +70,7 @@ public class EscribeArchivo {
                 guardarArchivo(file.getAbsolutePath(), text);
 
             } else {
-                JOptionPane.showMessageDialog(parent, "Error al guardar el archivo. El archivo ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+                mostrarMensDeError();
             }
         }
 
@@ -106,8 +106,7 @@ public class EscribeArchivo {
                         e.printStackTrace();
                     }
                 } else {
-                    String [] opcion = {"Aceptar"};
-                    CuadroDeDialogo.mostrar(parent, "Error al guardar el archivo. El archivo ya existe.", "Error", opcion);
+                    mostrarMensDeError();
                 }
             }
         } else {
@@ -118,11 +117,11 @@ public class EscribeArchivo {
         return false;
     }
 
-    public void escribirArchivo (String text, String enconding) throws IOException {
+    public void escribirArchivo (String text, String encoding) throws IOException {
         BufferedWriter writer = null;
 
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(getArhivoRuta()), enconding));
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(getArhivoRuta()), encoding));
             writer.write(text);
 
         } catch (IOException ex) {
@@ -132,6 +131,12 @@ public class EscribeArchivo {
             if (writer != null) writer.close();
         }
     }
+
+    private void mostrarMensDeError () {
+        String [] opcion = {"Aceptar"};
+        CuadroDeDialogo.mostrar(parent, "Error al crear el archivo. El archivo ya existe.", "Error", opcion, CuadroDeDialogo.ERROR);
+    }
+
 
     public void setNombreArchivo (String nombreArchivo) {
         this.nombreArchivo = nombreArchivo;
