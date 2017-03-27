@@ -230,21 +230,21 @@ public class EditorUI extends JFrame {
     private void confMenuVer (JMenu menu) {
         int fontSize = ConfDeUsuario.getInt(KEY_FUENTE_TAMANIO);
 
-        jmiAumentarFuente = new JMenuItem("Aumentar fuente");
+        jmiAumentarFuente = new JMenuItem("Aumentar zoom");
         jmiAumentarFuente.setIcon(new ImageIcon(getClass().getResource("icono/zoomAum.png")));
         jmiAumentarFuente.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, ActionEvent.CTRL_MASK));
         jmiAumentarFuente.setActionCommand("jmiAumentarFuente");
         jmiAumentarFuente.setEnabled(fontSize != 30);
         jmiAumentarFuente.addActionListener(e);
 
-        jmiDisminuirFuente = new JMenuItem("Disminuir fuente");
+        jmiDisminuirFuente = new JMenuItem("Disminuir zoom");
         jmiDisminuirFuente.setIcon(new ImageIcon(getClass().getResource("icono/zoomDism.png")));
         jmiDisminuirFuente.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_LESS, ActionEvent.CTRL_MASK));
         jmiDisminuirFuente.setActionCommand("jmiDisminuirFuente");
         jmiDisminuirFuente.setEnabled(fontSize != 8);
         jmiDisminuirFuente.addActionListener(e);
 
-        jmiTamanioOriginal = new JMenuItem("Restablecer fuente");
+        jmiTamanioOriginal = new JMenuItem("Restablecer zoom");
         jmiTamanioOriginal.setActionCommand("jmiTamanioOriginal");
         jmiTamanioOriginal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
         jmiTamanioOriginal.setEnabled(fontSize != 12);
