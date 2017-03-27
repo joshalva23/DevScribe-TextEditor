@@ -86,42 +86,42 @@ public class EditorUI extends JFrame {
         EventosBarraHerr e = new EventosBarraHerr();
 
         jbNuevoArchivo = new JButton(new ImageIcon(getClass().getResource("icono/archivo.png")));
-        jbNuevoArchivo.setToolTipText("Nuevo archivo (Ctrl-N)");
+        jbNuevoArchivo.setToolTipText("Nuevo archivo (Ctrl+N)");
         jbNuevoArchivo.setFocusable(false);
         jbNuevoArchivo.addActionListener(e);
 
         jbAbrirArchivoNuevo = new JButton(new ImageIcon(getClass().getResource("icono/abrir.png")));
-        jbAbrirArchivoNuevo.setToolTipText("Abrir (Ctrl+Mayús+O");
+        jbAbrirArchivoNuevo.setToolTipText("Abrir (Ctrl+O)");
         jbAbrirArchivoNuevo.setFocusable(false);
         jbAbrirArchivoNuevo.addActionListener(e);
 
         jbGuardarTodo = new JButton(new ImageIcon(getClass().getResource("icono/guardarTodo.png")));
-        jbGuardarTodo.setToolTipText("Guardar todo (Ctrl-T)");
+        jbGuardarTodo.setToolTipText("Guardar todo (Ctrl+T)");
         jbGuardarTodo.setFocusable(false);
         jbGuardarTodo.addActionListener(e);
 
         jbCortar = new JButton(new ImageIcon(getClass().getResource("icono/cortar.png")));
-        jbCortar.setToolTipText("Cortar (Ctrl-X)");
+        jbCortar.setToolTipText("Cortar (Ctrl+X)");
         jbCortar.setFocusable(false);
         jbCortar.addActionListener(e);
 
         jbCopiar = new JButton (new ImageIcon(getClass().getResource("icono/copiar.png")));
-        jbCopiar.setToolTipText("Copiar (Ctrl-C)");
+        jbCopiar.setToolTipText("Copiar (Ctrl+C)");
         jbCopiar.setFocusable(false);
         jbCopiar.addActionListener(e);
 
         jbPegar = new JButton (new ImageIcon(getClass().getResource("icono/pegar.png")));
-        jbPegar.setToolTipText("Pegar (Ctrl-V)");
+        jbPegar.setToolTipText("Pegar (Ctrl+V)");
         jbPegar.setFocusable(false);
         jbPegar.addActionListener(e);
 
         jbRehacer = new JButton(new ImageIcon(getClass().getResource("icono/rehacer.png")));
-        jbRehacer.setToolTipText("Rehacer (Ctrl-Y)");
+        jbRehacer.setToolTipText("Rehacer (Ctrl+Y)");
         jbRehacer.setFocusable(false);
         jbRehacer.addActionListener(e);
 
         jbDeshacer = new JButton (new ImageIcon(getClass().getResource("icono/deshacer.png")));
-        jbDeshacer.setToolTipText("Deshacer (Ctrl-Z)");
+        jbDeshacer.setToolTipText("Deshacer (Ctrl+Z)");
         jbDeshacer.setFocusable(false);
         jbDeshacer.addActionListener(e);
 
@@ -180,36 +180,42 @@ public class EditorUI extends JFrame {
 
     private void confMenuEditar (JMenu menu) {
         jmiDeshacer = new JMenuItem("Deshacer");
-        jmiDeshacer.setIcon(new ImageIcon(getClass().getResource("icono/deshacer.png")));
-        jmiDeshacer.setActionCommand("jmiDeshacer");
         jmiDeshacer.addActionListener(e);
+        jmiDeshacer.setActionCommand("jmiDeshacer");
+        jmiDeshacer.setIcon(new ImageIcon(getClass().getResource("icono/deshacer.png")));
+        jmiDeshacer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
 
         jmiRehacer = new JMenuItem("Rehacer");
-        jmiRehacer.setIcon(new ImageIcon(getClass().getResource("icono/rehacer.png")));
-        jmiRehacer.setActionCommand("jmiRehacer");
         jmiRehacer.addActionListener(e);
+        jmiRehacer.setActionCommand("jmiRehacer");
+        jmiRehacer.setIcon(new ImageIcon(getClass().getResource("icono/rehacer.png")));
+        jmiRehacer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
 
         //Se desabilita los menus item 'Rehacer y Deshacer'.
         actualizarMenuItem(false, false);
 
         jmiCopiar = new JMenuItem("Copiar");
-        jmiCopiar.setIcon(new ImageIcon(getClass().getResource("icono/copiar.png")));
-        jmiCopiar.setActionCommand("jmiCopiar");
         jmiCopiar.addActionListener(e);
+        jmiCopiar.setActionCommand("jmiCopiar");
+        jmiCopiar.setIcon(new ImageIcon(getClass().getResource("icono/copiar.png")));
+        jmiCopiar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
 
         jmiCortar = new JMenuItem("Cortar");
-        jmiCortar.setIcon(new ImageIcon(getClass().getResource("icono/cortar.png")));
-        jmiCortar.setActionCommand("jmiCortar");
         jmiCortar.addActionListener(e);
+        jmiCortar.setActionCommand("jmiCortar");
+        jmiCortar.setIcon(new ImageIcon(getClass().getResource("icono/cortar.png")));
+        jmiCortar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
 
         jmiPegar = new JMenuItem("Pegar");
-        jmiPegar.setIcon(new ImageIcon(getClass().getResource("icono/pegar.png")));
-        jmiPegar.setActionCommand("jmiPegar");
         jmiPegar.addActionListener(e);
+        jmiPegar.setActionCommand("jmiPegar");
+        jmiPegar.setIcon(new ImageIcon(getClass().getResource("icono/pegar.png")));
+        jmiPegar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
 
         jmiSelecTodo = new JMenuItem("Seleccionar todo");
-        jmiSelecTodo.setActionCommand("jmiSelecTodo");
         jmiSelecTodo.addActionListener(e);
+        jmiSelecTodo.setActionCommand("jmiSelecTodo");
+        jmiSelecTodo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
 
         //Menu Editar, carga de menu item.
         menu.add(jmiRehacer);
@@ -226,18 +232,21 @@ public class EditorUI extends JFrame {
 
         jmiAumentarFuente = new JMenuItem("Aumentar fuente");
         jmiAumentarFuente.setIcon(new ImageIcon(getClass().getResource("icono/zoomAum.png")));
+        jmiAumentarFuente.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, ActionEvent.CTRL_MASK));
         jmiAumentarFuente.setActionCommand("jmiAumentarFuente");
         jmiAumentarFuente.setEnabled(fontSize != 30);
         jmiAumentarFuente.addActionListener(e);
 
         jmiDisminuirFuente = new JMenuItem("Disminuir fuente");
         jmiDisminuirFuente.setIcon(new ImageIcon(getClass().getResource("icono/zoomDism.png")));
+        jmiDisminuirFuente.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_LESS, ActionEvent.CTRL_MASK));
         jmiDisminuirFuente.setActionCommand("jmiDisminuirFuente");
         jmiDisminuirFuente.setEnabled(fontSize != 8);
         jmiDisminuirFuente.addActionListener(e);
 
         jmiTamanioOriginal = new JMenuItem("Restablecer fuente");
         jmiTamanioOriginal.setActionCommand("jmiTamanioOriginal");
+        jmiTamanioOriginal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
         jmiTamanioOriginal.setEnabled(fontSize != 12);
         jmiTamanioOriginal.addActionListener(e);
 
@@ -303,30 +312,35 @@ public class EditorUI extends JFrame {
 
     private void confMenuArchivo (JMenu menu) {
         jmiNuevoArchivo = new JMenuItem("Nuevo archivo SL");
-        jmiNuevoArchivo.setIcon(new ImageIcon(getClass().getResource("icono/archivo.png")));
-        jmiNuevoArchivo.setActionCommand("jmiNuevoArchivo");
         jmiNuevoArchivo.addActionListener(e);
+        jmiNuevoArchivo.setActionCommand("jmiNuevoArchivo");
+        jmiNuevoArchivo.setIcon(new ImageIcon(getClass().getResource("icono/archivo.png")));
+        jmiNuevoArchivo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
 
         jmiAbrirArchivo = new JMenuItem("Abrir archivo");
-        jmiAbrirArchivo.setIcon(new ImageIcon(getClass().getResource("icono/abrir.png")));
-        jmiAbrirArchivo.setActionCommand("jmiAbrirArchivo");
         jmiAbrirArchivo.addActionListener(e);
+        jmiAbrirArchivo.setActionCommand("jmiAbrirArchivo");
+        jmiAbrirArchivo.setIcon(new ImageIcon(getClass().getResource("icono/abrir.png")));
+        jmiAbrirArchivo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 
         jmiGuardar = new JMenuItem("Guardar");
-        jmiGuardar.setActionCommand("jmiGuardar");
         jmiGuardar.addActionListener(e);
+        jmiGuardar.setActionCommand("jmiGuardar");
+        jmiGuardar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 
         jmiGuardarComo = new JMenuItem("Guardar como");
         jmiGuardarComo.addActionListener(e);
 
         jmiGuardarTodo = new JMenuItem("Guardar todo");
-        jmiGuardarTodo.setIcon(new ImageIcon(getClass().getResource("icono/guardarTodo.png")));
-        jmiGuardarTodo.setActionCommand("jmiGuardarTodo");
         jmiGuardarTodo.addActionListener(e);
+        jmiGuardarTodo.setActionCommand("jmiGuardarTodo");
+        jmiGuardarTodo.setIcon(new ImageIcon(getClass().getResource("icono/guardarTodo.png")));
+        jmiGuardarTodo.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));
 
         jmiCerrarPestania = new JMenuItem("Cerrar pestaña");
-        jmiCerrarPestania.setActionCommand("jmiCerrarPestania");
         jmiCerrarPestania.addActionListener(e);
+        jmiCerrarPestania.setActionCommand("jmiCerrarPestania");
+        jmiCerrarPestania.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
 
         jmiSalir = new JMenuItem("Salir");
         jmiSalir.setActionCommand("jmiSalir");
@@ -772,7 +786,7 @@ public class EditorUI extends JFrame {
                 else if (e.getSource() == jbPegar)
                     editor.pegar();
 
-                else if (e.getSource() == jbAyuda);
+                else if (e.getSource() == jbAyuda)
                     new Ayuda(EditorUI.this);
             }
         }
