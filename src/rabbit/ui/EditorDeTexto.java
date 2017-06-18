@@ -205,7 +205,6 @@ public class EditorDeTexto extends JPanel {
     }
 
     private void confPanelDeLineas () {
-//        cantFila = obtenerFila(textPane.getText().length());
         cantFila = cantFila();
 
         jpNumLineas = new JPanel();
@@ -241,11 +240,11 @@ public class EditorDeTexto extends JPanel {
         textPane.selectAll();
     }
 
-    public void setArchivoRuta (String archivoRuta) {
+    void setArchivoRuta(String archivoRuta) {
         this.archivoRuta = archivoRuta;
     }
 
-    public String getArchivoRuta () {
+    String getArchivoRuta() {
         return archivoRuta;
     }
 
@@ -264,20 +263,20 @@ public class EditorDeTexto extends JPanel {
         return textPane.getText();
     }
 
-    public String getNombreArchivo() {
+    String getNombreArchivo() {
         return nombreArchivo;
     }
 
-    public void setNombreArchivo(String nombreArchivo) {
+    void setNombreArchivo(String nombreArchivo) {
         this.nombreArchivo = nombreArchivo;
     }
 
-    public void rehacer () {
+    void rehacer() {
         undoManager.redo();
         editorUI.actualizarMenuItem (undoManager.canUndo(), undoManager.canRedo());
     }
 
-    public void deshacer () {
+    void deshacer() {
         undoManager.undo();
         editorUI.actualizarMenuItem (undoManager.canUndo(), undoManager.canRedo());
     }
@@ -347,13 +346,22 @@ public class EditorDeTexto extends JPanel {
         return archivoRuta.hashCode();
     }
 
-    public boolean archivoModificado () {
+    boolean archivoModificado() {
         String textGuardado = LeerArchivo.leer(archivoRuta);
 
         return !textGuardado.equals(textPane.getText());
     }
 
-    public void actualizarTema (int tema) {
+    String archivoModifRetornaContenido() {
+        String textGuardado = LeerArchivo.leer(archivoRuta);
+
+        if (textGuardado.equals(textPane.getText()))
+            return null;
+
+        return textGuardado;
+    }
+
+    void actualizarTema(int tema) {
         docEstilo.actualizarColorDocumento(new EditorColor(tema));
         //Guardo la posición antes de recargar el texto.
         int posCaret = textPane.getCaretPosition();
@@ -363,7 +371,7 @@ public class EditorDeTexto extends JPanel {
         confEstiloYFormato();
     }
 
-    public void actualizarFuente () {
+    void actualizarFuente() {
         Font font;
 
         //Cambia tamaño del panel de texto.
@@ -378,7 +386,7 @@ public class EditorDeTexto extends JPanel {
             component.setFont(font);
     }
 
-    public void habilitarNumLineas (boolean state) {
+    void habilitarNumLineas(boolean state) {
         jpNumLineas.setVisible(state);
     }
 
