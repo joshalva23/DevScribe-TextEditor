@@ -27,7 +27,6 @@ import rabbit.io.LeerArchivo;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Utilities;
 import java.awt.*;
 import java.io.File;
 
@@ -115,14 +114,20 @@ public class EditorDeTexto extends JPanel {
     }
 
     private void actualizarPosCursor (int caretPosc) {
-        //Extraigo el label que contiene el panel 'jpPosicionCursor'.
+        //Se extrae el label que contiene el panel 'jpPosicionCursor'.
         JLabel jlPosCursor = (JLabel) jpPosicionCursor.getComponent(1);
 
-        int fila = obtenerFila(caretPosc);
-        int colum = obtenerColum(caretPosc);
+        try {
+            int fila = textArea.getLineOfOffset(caretPosc);
+            int colum = caretPosc - textArea.getLineStartOffset(fila);
 
-        //Actualizo posición del cursor.
-        jlPosCursor.setText(fila + " : " + colum);
+            fila ++;
+            colum ++;
+
+            jlPosCursor.setText(fila + " : " + colum);
+        } catch (BadLocationException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void confPanelEditor () {
@@ -250,34 +255,5 @@ public class EditorDeTexto extends JPanel {
 
         textArea.setFont(font);
         scroll.getGutter().setLineNumberFont(font);
-    }
-
-    private int obtenerFila (int posc) {
-        int numFila = 0;
-
-        try {
-            for (int offset = posc; offset >= 0;) {
-                offset = Utilities.getRowStart(textArea, offset) - 1;
-                numFila ++;
-            }
-
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }
-
-        return numFila;
-    }
-
-    private int obtenerColum (int posc) {
-        int colNum = 0;
-
-        try {
-            colNum = posc - Utilities.getRowStart(textArea, posc) + 1;
-
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }
-
-        return colNum;
     }
 }
