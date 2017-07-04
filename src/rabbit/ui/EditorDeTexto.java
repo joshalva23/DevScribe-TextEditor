@@ -18,40 +18,33 @@
 
 package rabbit.ui;
 
-import rabbit.document.tool.DocumentoEstilo;
-import rabbit.document.tool.PintarLinea;
-import rabbit.document.tool.TabSizeEditorKit;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.Gutter;
+import org.fife.ui.rtextarea.RTextScrollPane;
 import rabbit.io.ConfDeUsuario;
 import rabbit.io.LeerArchivo;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
-import javax.swing.undo.UndoManager;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Utilities;
+import java.awt.*;
+import java.io.File;
 
 import static rabbit.io.ConfDeUsuario.*;
 
 public class EditorDeTexto extends JPanel {
     private String archivoRuta, nombreArchivo;
 
-    private JTextPane textPane;
-    private JPopupMenu menuEmergente;
-    private JMenuItem jmiCortar, jmiCopiar, jmiPegar, jmiSelecTodo;
+    private RSyntaxTextArea textArea;
+    private RTextScrollPane scroll;
 
     private JPanel jpEditor;
-    private JPanel jpNumLineas;
     private JPanel jpPosicionCursor;
 
     private EditorUI editorUI;
-    private UndoManager undoManager;
-    private DocumentoEstilo docEstilo;
-    private PintarLinea pintarLinea;
 
     static int fontSize;
-    private int cantFila;
 
     static {
         //Se obtiene el tamaño de la fuente guardado.
@@ -65,60 +58,44 @@ public class EditorDeTexto extends JPanel {
     public EditorDeTexto (File file, String text, final EditorUI editorUI) {
         setLayout(new GridBagLayout());
 
-        undoManager = new UndoManager();
         this.editorUI = editorUI;
 
         archivoRuta = file.getAbsolutePath();
         nombreArchivo = file.getName();
 
-        textPane = new JTextPane();
-        docEstilo = new DocumentoEstilo(textPane);
-        textPane.setEditorKit(new TabSizeEditorKit());
-        textPane.setStyledDocument(docEstilo);
-        textPane.setSelectedTextColor(null);
-        textPane.setFocusable(true);
-        pintarLinea = new PintarLinea(textPane);
+        textArea = new RSyntaxTextArea();
+        textArea.setTabSize(4);
+        textArea.setFocusable(true);
+        textArea.setMarkOccurrences(true);
+        textArea.setCodeFoldingEnabled(true);
+        textArea.setPaintTabLines(ConfDeUsuario.getBoolean(KEY_GUIAS_IDENTACION));
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+        textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize));
 
         if (text == null) {
-            textPane.setText("inicio\n\tcls()\n\t\nfin"); //Texto que tendra por defecto.
-            textPane.setCaretPosition(17); //Se configura la posición del cursor.
+            textArea.setText("inicio\n\tcls()\n\t\nfin"); //Texto que tendra por defecto.
+            textArea.setCaretPosition(17); //Se configura la posición del cursor.
 
         } else {
-            textPane.setText(text);
-            textPane.setCaretPosition(0);
+            textArea.setText(text);
+            textArea.setCaretPosition(0);
         }
+        textArea.requestFocus();
 
-        textPane.addCaretListener(new CaretListener() {
-            @Override
-            public void caretUpdate(CaretEvent e) {
-                actualizarNumLineas ();
-                actualizarPosCursor(textPane.getCaretPosition());
-            }
+        textArea.addCaretListener(e -> {
+            actualizarPosCursor(textArea.getCaretPosition());
+            EditorDeTexto.this.editorUI.actualizarMenuItem (textArea.canUndo(), textArea.canRedo());
         });
 
-        textPane.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3)
-                    menuEmergente.show(e.getComponent(), e.getX(), e.getY());
-            }
-        });
+        textArea.getDocument().addUndoableEditListener(e ->
+             EditorDeTexto.this.editorUI.actualizarMenuItem (textArea.canUndo(), textArea.canRedo())
+        );
 
-        textPane.getDocument().addUndoableEditListener(new UndoableEditListener() {
-            @Override
-            public void undoableEditHappened(UndoableEditEvent e) {
-                undoManager.addEdit(e.getEdit());
-                //Se actualiza el estado de los menus item 'Rehacer y Deshacer'.
-                EditorDeTexto.this.editorUI.actualizarMenuItem (undoManager.canUndo(), undoManager.canRedo());
-            }
-        });
-
-        confMenuEmergente();
-        confPanelDeLineas();
+        //confMenuEmergente();
         confPanelEditor();
         confPanelPosicionCursor ();
-        confEstiloYFormato();
-        actualizarPosCursor(textPane.getCaretPosition());
+        //confEstiloYFormato();
+        actualizarPosCursor(textArea.getCaretPosition());
 
         GridBagConstraints conf = new GridBagConstraints();
 
@@ -127,10 +104,7 @@ public class EditorDeTexto extends JPanel {
         conf.weightx = conf.weighty = 1.0;
         conf.fill = GridBagConstraints.BOTH;
 
-        JScrollPane scroll = new JScrollPane(jpEditor);
-        scroll.getVerticalScrollBar().setUnitIncrement(16);
-        scroll.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 0, new Color (0x6D6D6D)));
-        add(scroll, conf);
+        add(jpEditor, conf);
 
         //Configuración del componente en la fila 1 columna 0.
         conf.gridy = 1;
@@ -138,28 +112,6 @@ public class EditorDeTexto extends JPanel {
         conf.fill = GridBagConstraints.HORIZONTAL;
 
         add (jpPosicionCursor, conf);
-    }
-
-    private void actualizarNumLineas () {
-        int cantFilaActual = cantFila();
-
-        if (cantFila != cantFilaActual) {
-            //Compruebo si ha aumentado la cantidad de filas.
-            if (cantFila < cantFilaActual) {
-                //Agregar nuevos numeros de lineas.
-                for (int i = cantFila + 1; i <= cantFilaActual; i ++)
-                    jpNumLineas.add(crearEtiquetaNum(i));
-
-            } else {
-                //Las cantidad de lineas ha disminuido, remover las etiquetas sobrantes.
-                for (int i = cantFila - 1; i >= cantFilaActual; i --) {
-                    jpNumLineas.remove(i); //Remover elemento de la posición indicada.
-                    jpNumLineas.updateUI();
-                }
-            }
-            //Actualiza nueva cantidad de cantFilaActual.
-            cantFila = cantFilaActual;
-        }
     }
 
     private void actualizarPosCursor (int caretPosc) {
@@ -174,25 +126,15 @@ public class EditorDeTexto extends JPanel {
     }
 
     private void confPanelEditor () {
-        jpEditor = new JPanel(new GridBagLayout());
+        scroll = new RTextScrollPane(textArea);
+        scroll.getGutter().setBorder(new Gutter.GutterBorder(0, 0, 0, 5));
+        scroll.getGutter().setLayout(new BorderLayout(10, 0));
+        scroll.setFoldIndicatorEnabled(true);
+        scroll.setLineNumbersEnabled(ConfDeUsuario.getBoolean(KEY_NUM_LINEA));
+        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        GridBagConstraints conf = new GridBagConstraints();
-
-        //Fila 0 columna 0.
-        conf.gridx = conf.gridy = 0;
-        conf.weighty = 1.0;
-        conf.fill = GridBagConstraints.VERTICAL;
-        conf.insets = new Insets(3, 8, 0, 8);
-
-        jpEditor.add(jpNumLineas, conf);
-
-        //Fila 0 columna 1.
-        conf.gridx = 1;
-        conf.weightx = 1.0;
-        conf.fill = GridBagConstraints.BOTH;
-        conf.insets = new Insets(0, 0, 0, 0);
-
-        jpEditor.add(textPane, conf);
+        jpEditor  = new JPanel(new GridLayout(1, 1));
+        jpEditor.add(scroll);
     }
 
     private void confPanelPosicionCursor () {
@@ -204,40 +146,20 @@ public class EditorDeTexto extends JPanel {
         jpPosicionCursor.add(Box.createRigidArea(new Dimension(10, 18)));
     }
 
-    private void confPanelDeLineas () {
-        cantFila = cantFila();
-
-        jpNumLineas = new JPanel();
-        jpNumLineas.setOpaque(false);
-        jpNumLineas.setVisible(ConfDeUsuario.getBoolean(KEY_NUM_LINEA));
-        jpNumLineas.setLayout(new BoxLayout(jpNumLineas, BoxLayout.Y_AXIS));
-
-        for (int i = 1; i <= cantFila; i ++)
-            jpNumLineas.add(crearEtiquetaNum(i));
-    }
-
-    private JLabel crearEtiquetaNum (int num) {
-        JLabel jlNum = new JLabel("" + num);
-        jlNum.setFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize));
-        jlNum.setForeground(new Color (0x808080));
-
-        return jlNum;
-    }
-
     void copiar () {
-        textPane.copy();
+        textArea.copy();
     }
 
     void cortar () {
-        textPane.cut();
+        textArea.cut();
     }
 
     void pegar () {
-        textPane.paste();
+        textArea.paste();
     }
 
     void seleccTodo () {
-        textPane.selectAll();
+        textArea.selectAll();
     }
 
     void setArchivoRuta(String archivoRuta) {
@@ -248,19 +170,19 @@ public class EditorDeTexto extends JPanel {
         return archivoRuta;
     }
 
-    public void setText (String text) {
+    void setText(String text) {
         int caretPos = 0;
 
         //Compruebo si el archivo va ha ser recargado para guardar la posición del cursor.
-        if (text.length() >= textPane.getText().length())
-            caretPos = textPane.getCaretPosition();
+        if (text.length() >= textArea.getText().length())
+            caretPos = textArea.getCaretPosition();
 
-        textPane.setText(text);
-        textPane.setCaretPosition(caretPos);
+        textArea.setText(text);
+        textArea.setCaretPosition(caretPos);
     }
 
-    public String getText () {
-        return textPane.getText();
+    String getText() {
+        return textArea.getText();
     }
 
     String getNombreArchivo() {
@@ -272,61 +194,11 @@ public class EditorDeTexto extends JPanel {
     }
 
     void rehacer() {
-        undoManager.redo();
-        editorUI.actualizarMenuItem (undoManager.canUndo(), undoManager.canRedo());
+        textArea.redoLastAction();
     }
 
     void deshacer() {
-        undoManager.undo();
-        editorUI.actualizarMenuItem (undoManager.canUndo(), undoManager.canRedo());
-    }
-
-    //Se configura el color de fondo y el formato de los componentes de acuerdo al tema elegido.
-    private void confEstiloYFormato () {
-        switch (EditorColor.tema) {
-            case EditorColor.DARCULA :
-                textPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize));
-                textPane.setBackground(new Color (0x2B2B2B));
-                textPane.setCaretColor(new Color (0xA9B7C6));
-                textPane.setSelectionColor(new Color(0x214283));
-
-                pintarLinea.setColor(new Color(0x3A3A3A));
-
-                jpEditor.setBackground(new Color(0x343434));
-                break;
-
-            case EditorColor.INTELLIJ :
-                textPane.setFont(new Font (Font.MONOSPACED, Font.BOLD, fontSize));
-                textPane.setBackground(new Color(0xF0F0F0));
-                textPane.setCaretColor(Color.BLACK);
-                textPane.setSelectionColor(new Color(0xB0C5E3));
-
-                pintarLinea.setColor(new Color(0xFFFFDC));
-
-                jpEditor.setBackground(new Color(0xE7E3E3));
-                break;
-        }
-    }
-
-    private void confMenuEmergente () {
-        menuEmergente = new JPopupMenu();
-
-        //Creación de los menu item.
-        jmiCopiar = new JMenuItem("Copiar");
-        jmiCortar = new JMenuItem("Cortar");
-        jmiPegar = new JMenuItem("Pegar");
-        jmiSelecTodo = new JMenuItem("Seleccionar todo");
-
-        jmiCopiar.addActionListener(eventosMenu);
-        jmiCortar.addActionListener(eventosMenu);
-        jmiPegar.addActionListener(eventosMenu);
-        jmiSelecTodo.addActionListener(eventosMenu);
-
-        menuEmergente.add(jmiCopiar);
-        menuEmergente.add(jmiCortar);
-        menuEmergente.add(jmiPegar);
-        menuEmergente.addSeparator();
-        menuEmergente.add(jmiSelecTodo);
+        textArea.undoLastAction();
     }
 
     public String toString () {
@@ -346,48 +218,38 @@ public class EditorDeTexto extends JPanel {
         return archivoRuta.hashCode();
     }
 
+    void habilitarNumLineas(boolean state) {
+        scroll.setLineNumbersEnabled(state);
+    }
+
+    void habilitarGuiasDeIdentacion(boolean state) {
+        textArea.setPaintTabLines(state);
+    }
+
     boolean archivoModificado() {
         String textGuardado = LeerArchivo.leer(archivoRuta);
 
-        return !textGuardado.equals(textPane.getText());
+        return !textGuardado.equals(textArea.getText());
     }
 
     String archivoModifRetornaContenido() {
         String textGuardado = LeerArchivo.leer(archivoRuta);
+        String textEditor = textArea.getText();
 
-        if (textGuardado.equals(textPane.getText()))
-            return null;
+        if (textGuardado.equals(textEditor)) return null;
 
         return textGuardado;
     }
 
-    void actualizarTema(int tema) {
-        docEstilo.actualizarColorDocumento(new EditorColor(tema));
-        //Guardo la posición antes de recargar el texto.
-        int posCaret = textPane.getCaretPosition();
-        textPane.setText(textPane.getText());
-        textPane.setCaretPosition(posCaret);
+    void actualizarTema() {
 
-        confEstiloYFormato();
     }
 
     void actualizarFuente() {
-        Font font;
+        Font font = new Font(Font.MONOSPACED, Font.PLAIN, fontSize);
 
-        //Cambia tamaño del panel de texto.
-        if (EditorColor.tema == EditorColor.INTELLIJ)
-            font = new Font(Font.MONOSPACED, Font.BOLD, fontSize);
-        else
-            font = new Font(Font.MONOSPACED, Font.PLAIN, fontSize);
-
-        textPane.setFont(font);
-        //Cambia tamaño de las etiquetas de los numeros.
-        for (Component component : jpNumLineas.getComponents())
-            component.setFont(font);
-    }
-
-    void habilitarNumLineas(boolean state) {
-        jpNumLineas.setVisible(state);
+        textArea.setFont(font);
+        scroll.getGutter().setLineNumberFont(font);
     }
 
     private int obtenerFila (int posc) {
@@ -395,7 +257,7 @@ public class EditorDeTexto extends JPanel {
 
         try {
             for (int offset = posc; offset >= 0;) {
-                offset = Utilities.getRowStart(textPane, offset) - 1;
+                offset = Utilities.getRowStart(textArea, offset) - 1;
                 numFila ++;
             }
 
@@ -410,7 +272,7 @@ public class EditorDeTexto extends JPanel {
         int colNum = 0;
 
         try {
-            colNum = posc - Utilities.getRowStart(textPane, posc) + 1;
+            colNum = posc - Utilities.getRowStart(textArea, posc) + 1;
 
         } catch (BadLocationException e) {
             e.printStackTrace();
@@ -418,35 +280,4 @@ public class EditorDeTexto extends JPanel {
 
         return colNum;
     }
-
-    private int cantFila () {
-        int cantFila = 0;
-        String text = textPane.getText();
-
-        for (int i = text.length() - 1; i >= 0; i --) {
-            if (text.charAt(i) == '\n') {
-                cantFila ++;
-            }
-        }
-
-        return cantFila + 1;
-    }
-
-    //Clase anónima para el manejo de los eventos de los menu item.
-    private ActionListener eventosMenu = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == jmiCortar)
-                cortar();
-
-            else if (e.getSource() == jmiCopiar)
-                copiar();
-
-            else if (e.getSource() == jmiPegar)
-                pegar();
-
-            else if (e.getSource() == jmiSelecTodo)
-                seleccTodo();
-        }
-    };
 }
