@@ -18,14 +18,19 @@
 
 package rabbit.ui;
 
+import rabbit.util.EstadoArchivo;
 import rabbit.io.ConfDeUsuario;
 import rabbit.io.EscribeArchivo;
 import rabbit.io.LeerArchivo;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static rabbit.io.ConfDeUsuario.*;
 
@@ -45,6 +50,9 @@ public class EditorUI extends JFrame {
 
     private JToolBar jtb;
 
+    private Map <String, EstadoArchivo> listEstadoArch;
+    private boolean ventInternaActivada = true;
+
     public EditorUI () {
         super ("Rabbit");
         //Estado de la ventana maximizado.
@@ -53,18 +61,20 @@ public class EditorUI extends JFrame {
         setSize(Toolkit.getDefaultToolkit().getScreenSize());
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setIconImage(new ImageIcon(getClass().getResource("icono/rabbit.png")).getImage());
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                cerrarPrograma();
-            }
-        });
+        addWindowListener(new EventosDeVentana());
 
+        listEstadoArch = new HashMap<>();
         e = new EventosMenuItem();
 
         jTabbedPane = new JTabbedPane();
         jTabbedPane.setFocusable(false);
         jTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        jTabbedPane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                recargadoAutomatico();
+            }
+        });
 
         add (jTabbedPane, BorderLayout.CENTER);
 
@@ -144,7 +154,7 @@ public class EditorUI extends JFrame {
         jtb.add(jbAyuda);
     }
 
-    public void actualizarMenuItem (boolean undo, boolean redo) {
+    void actualizarMenuItem(boolean undo, boolean redo) {
         jmiRehacer.setEnabled(redo);
         jmiDeshacer.setEnabled(undo);
 
@@ -420,6 +430,7 @@ public class EditorUI extends JFrame {
         }
 
         jTabbedPane.remove(editor); //Se cierra la pestaña.
+        listEstadoArch.remove(editor.getArchivoRuta());
         if (jTabbedPane.getTabCount() == 0) {
             activarMenuItem(false);
             actualizarMenuItem(false, false);
@@ -509,6 +520,7 @@ public class EditorUI extends JFrame {
                 System.exit(0);
 
             default :
+                ventInternaActivada = true;
                 int resp = DialogoGuardarVarios.mostrarDialogo(EditorUI.this, list);
                 if (resp == DialogoGuardarVarios.OPER_TERMINADA)
                     System.exit(0);
@@ -516,19 +528,30 @@ public class EditorUI extends JFrame {
     }
 
     private int mostrarDialogoGuardarCambios (String nombreArchivo) {
+        ventInternaActivada = true;
         String message = "El archivo " + nombreArchivo + " se ha modificado. Guardar los cambios?";
         String [] bt = {"Guardar", "No Guardar", "Cancelar"};
 
         return CuadroDeDialogo.mostrar(this, message, "Guardar cambios", bt, CuadroDeDialogo.INFORMACION);
     }
 
+    private int mostrarDialogoRecargarArchivo (String nombreArchivo) {
+        ventInternaActivada = true;
+        String message = "El archivo " + nombreArchivo + " se ha modificado. Desea recargarlo?";
+        String [] bt = {"Si", "No"};
+
+        return CuadroDeDialogo.mostrar(this, message, "Recargar archivo", bt, CuadroDeDialogo.INFORMACION);
+    }
+
     private void nuevoArchivo () {
+        ventInternaActivada = true;
         EscribeArchivo writer = new EscribeArchivo(EditorUI.this);
         if (writer.guardarArchivoValidarExtension(null, "inicio\n  cls()\n  \nfin"))
             insertarNuevoEditor(new EditorDeTexto(writer.getArhivoRuta(), null, EditorUI.this));
     }
 
     private void abrirArchivo () {
+        ventInternaActivada = true;
         LeerArchivo read = new LeerArchivo(EditorUI.this);
         if (read.archivoLeido()) { //Compruebo si el archivo se pudo leer.
             EditorDeTexto editorDeTexto;
@@ -569,6 +592,31 @@ public class EditorUI extends JFrame {
         }
     }
 
+    private void recargadoAutomatico () {
+        if (jTabbedPane.getTabCount() != 0) {
+            EditorDeTexto editor = (EditorDeTexto) jTabbedPane.getSelectedComponent();
+
+            if (listEstadoArch.containsKey(editor.getArchivoRuta())) {
+                //Se obtiene el contenido actual del archivo.
+                String textoArhivo = LeerArchivo.leer(editor.getArchivoRuta());
+                //Se extrae el estado del archivo guardado antes de que la ventana se haya deshabilitado.
+                EstadoArchivo textoArchivoAlSalir = listEstadoArch.remove(editor.getArchivoRuta());
+                String textoEditor = editor.getText();
+
+                if (textoArchivoAlSalir.isActualizado()) {
+                    if (!textoEditor.equals(textoArhivo))
+                        editor.setText(textoArhivo);
+
+                } else {
+                    if (!textoArhivo.equals(textoArchivoAlSalir.getContenido()) && !textoEditor.equals(textoArhivo)) {
+                        if (mostrarDialogoRecargarArchivo(editor.getNombreArchivo()) == 0)
+                            editor.setText(textoArhivo);
+                    }
+                }
+            }
+        }
+    }
+
     //Actualiza la fuente de todos los editores abiertos.
     private void actFuentDeTodosLosEditores () {
         EditorDeTexto editorDeTexto;
@@ -600,6 +648,7 @@ public class EditorUI extends JFrame {
                             break;
 
                         case "jmiGuardarComo" :
+                            ventInternaActivada = true;
                             EscribeArchivo escribe = new EscribeArchivo(EditorUI.this);
                             if (escribe.guardarArchivo(editor.getText())) {
                                 //Se actualiza el nombre de la pestaña.
@@ -789,6 +838,54 @@ public class EditorUI extends JFrame {
                 else if (e.getSource() == jbAyuda)
                     new Ayuda(EditorUI.this);
             }
+        }
+    }
+
+    private class EventosDeVentana extends WindowAdapter {
+        @Override
+        public void windowActivated(WindowEvent e) {
+            if (!ventInternaActivada)
+                recargadoAutomatico();
+
+            else
+                ventInternaActivada = false;
+        }
+
+        @Override
+        public void windowDeactivated(WindowEvent e) {
+            if (!ventInternaActivada) {
+                int tabCount = jTabbedPane.getTabCount();
+
+                if (tabCount != 0) {
+                    EditorDeTexto editorDeTexto;
+                    EstadoArchivo estadoArch;
+                    String contenido;
+
+                    for (int i = 0; i < tabCount; i++) {
+                        editorDeTexto = (EditorDeTexto) jTabbedPane.getComponentAt(i);
+
+                        //Si el estado del archivo es actualizado hace directamente un break.
+                        estadoArch = listEstadoArch.get(editorDeTexto.getArchivoRuta());
+                        if (estadoArch != null && estadoArch.isActualizado()) break;
+
+                        //Archivo no actualizado.
+                        if ((contenido = editorDeTexto.archivoModifRetornaContenido()) != null)
+                            estadoArch = new EstadoArchivo(editorDeTexto.getArchivoRuta(), contenido);
+
+                        //Archivo actualizado.
+                        else
+                            estadoArch = new EstadoArchivo(editorDeTexto.getArchivoRuta());
+
+                        listEstadoArch.put(editorDeTexto.getArchivoRuta(), estadoArch);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            //TODO: Debo guardar la ruta de los archivos abiertos, antes de salir.
+            cerrarPrograma();
         }
     }
 }
