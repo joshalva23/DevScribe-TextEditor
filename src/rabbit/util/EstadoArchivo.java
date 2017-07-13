@@ -1,4 +1,4 @@
-package rabbit.document.tool;
+package rabbit.util;
 
 public class EstadoArchivo {
     private String rutaAbsoluta, contenido;
