@@ -87,7 +87,7 @@ public class EditorDeTexto extends JPanel {
         });
 
         textArea.getDocument().addUndoableEditListener(e ->
-             EditorDeTexto.this.editorUI.actualizarMenuItem (textArea.canUndo(), textArea.canRedo())
+            EditorDeTexto.this.editorUI.actualizarMenuItem (textArea.canUndo(), textArea.canRedo())
         );
 
         //confMenuEmergente();
@@ -134,6 +134,7 @@ public class EditorDeTexto extends JPanel {
         scroll = new RTextScrollPane(textArea);
         scroll.getGutter().setBorder(new Gutter.GutterBorder(0, 0, 0, 5));
         scroll.getGutter().setLayout(new BorderLayout(10, 0));
+        scroll.getGutter().setLineNumberFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize));
         scroll.setFoldIndicatorEnabled(true);
         scroll.setLineNumbersEnabled(ConfDeUsuario.getBoolean(KEY_NUM_LINEA));
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
