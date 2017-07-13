@@ -797,6 +797,17 @@ public class EditorUI extends JFrame {
                             ConfDeUsuario.putBoolean(KEY_BARRA_HERRAMIENTAS, est);
                             break;
 
+                        case "jcbGuiasDeIndentacion" :
+                            boolean value = jcbGuiasDeIndentacion.isSelected();
+
+                            ConfDeUsuario.putBoolean(KEY_GUIAS_IDENTACION, value);
+
+                            for (int i = 0; i < jTabbedPane.getTabCount(); i ++) {
+                                editor = (EditorDeTexto) jTabbedPane.getComponentAt(i);
+                                editor.habilitarGuiasDeIdentacion(value);
+                            }
+                            break;
+
                         case "jmiAyuda" :
                             new Ayuda(EditorUI.this);
                             break;
