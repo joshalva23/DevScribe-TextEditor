@@ -374,11 +374,11 @@ public class EditorUI extends JFrame {
         jpTab.setLayout(new BoxLayout(jpTab, BoxLayout.X_AXIS));
 
         //Etiqueta que guarda el nombre del archivo.
-        JLabel nombreArchivo = new JLabel(editor.getNombreArchivo());
+        JLabel nombreArchivo = new JLabel(editor.getFile().getName());
 
         final JLabel jlCerrar = new JLabel (new ImageIcon(getClass().getResource("icono/c1.png")));
         //Se guarda la ruta del archivo como identificador para cerrar la pestaña.
-        jlCerrar.setName(editor.getArchivoRuta());
+        jlCerrar.setName(editor.getFile().getAbsolutePath());
         jlCerrar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -391,7 +391,7 @@ public class EditorUI extends JFrame {
                     for (int i = 0; i < jTabbedPane.getTabCount(); i ++) {
                         editorDeTexto = (EditorDeTexto) jTabbedPane.getComponentAt(i);
 
-                        if (editorDeTexto.getArchivoRuta().equals(jlCerrar.getName())) {
+                        if (editorDeTexto.getFile().getAbsolutePath().equals(jlCerrar.getName())) {
                             tabClose(editorDeTexto);
                             break;
                         }
@@ -418,10 +418,10 @@ public class EditorUI extends JFrame {
 
     private void tabClose (EditorDeTexto editor) {
         if (editor.archivoModificado()) {
-            switch (mostrarDialogoGuardarCambios(editor.getNombreArchivo())) {
+            switch (mostrarDialogoGuardarCambios(editor.getFile().getName())) {
                 case 0 :
                     //TODO : Debo comprobar si se pudo guardar para cerrarlo.
-                    new EscribeArchivo(this).guardarArchivo(editor.getArchivoRuta(), editor.getText());
+                    new EscribeArchivo(this).guardarArchivo(editor.getFile(), editor.getText());
                     break;
 
                 case 2 : //Cancelar
@@ -430,7 +430,7 @@ public class EditorUI extends JFrame {
         }
 
         jTabbedPane.remove(editor); //Se cierra la pestaña.
-        listEstadoArch.remove(editor.getArchivoRuta());
+        listEstadoArch.remove(editor.getFile().getAbsolutePath());
         if (jTabbedPane.getTabCount() == 0) {
             activarMenuItem(false);
             actualizarMenuItem(false, false);
@@ -450,7 +450,7 @@ public class EditorUI extends JFrame {
 
         int index = jTabbedPane.getTabCount() - 1;
         jTabbedPane.setTabComponentAt(index, insertTab(editor));
-        jTabbedPane.setToolTipTextAt(index, editor.getArchivoRuta());
+        jTabbedPane.setToolTipTextAt(index, editor.getFile().getAbsolutePath());
         jTabbedPane.setSelectedIndex(index);
 
         if (jTabbedPane.getTabCount() == 1) activarMenuItem(true);
@@ -490,7 +490,7 @@ public class EditorUI extends JFrame {
     }
 
     public void guardarArchivo (EditorDeTexto editor) {
-        new EscribeArchivo(this).guardarArchivo(editor.getArchivoRuta(), editor.getText());
+        new EscribeArchivo(this).guardarArchivo(editor.getFile(), editor.getText());
     }
 
     private void cerrarPrograma () {
@@ -506,10 +506,10 @@ public class EditorUI extends JFrame {
         switch (list.size()) {
             case 1 :
                 EditorDeTexto editor = list.get(0);
-                switch (mostrarDialogoGuardarCambios(editor.getNombreArchivo())) {
+                switch (mostrarDialogoGuardarCambios(editor.getFile().getName())) {
                     case 0: //Guardar el archivo.
                         //TODO : Debo comprobar si se pudo guardar para cerrarlo.
-                        new EscribeArchivo(this).guardarArchivo(editor.getArchivoRuta(), editor.getText());
+                        new EscribeArchivo(this).guardarArchivo(editor.getFile(), editor.getText());
                         break;
 
                     case 2: //Cancelar
@@ -547,7 +547,7 @@ public class EditorUI extends JFrame {
         ventInternaActivada = true;
         EscribeArchivo writer = new EscribeArchivo(EditorUI.this);
         if (writer.guardarArchivoValidarExtension(null, "inicio\n  cls()\n  \nfin"))
-            insertarNuevoEditor(new EditorDeTexto(writer.getArhivoRuta(), null, EditorUI.this));
+            insertarNuevoEditor(new EditorDeTexto(writer.getFile(), null, EditorUI.this));
     }
 
     private void abrirArchivo () {
@@ -560,7 +560,7 @@ public class EditorUI extends JFrame {
             for (i = 0; i < tabCount; i ++) {
                 editorDeTexto = (EditorDeTexto) jTabbedPane.getComponentAt(i);
                 //Compruebo si el arhivo que se desea abrir ya esta abierto.
-                if (editorDeTexto.getArchivoRuta().equals(read.getArchivoRuta())) {
+                if (editorDeTexto.getFile().getAbsolutePath().equals(read.getFile().getAbsolutePath())) {
                     if (editorDeTexto.archivoModificado())
                         editorDeTexto.setText(read.getText()); //Recargar el archivo.
 
@@ -569,7 +569,7 @@ public class EditorUI extends JFrame {
                 }
             }
             if (tabCount == i) //Compruebo si el archivo no ha sido abierto.
-                insertarNuevoEditor(new EditorDeTexto(read.getArchivoRuta(), read.getText(), EditorUI.this));
+                insertarNuevoEditor(new EditorDeTexto(read.getFile(), read.getText(), EditorUI.this));
         }
     }
 
@@ -579,7 +579,7 @@ public class EditorUI extends JFrame {
             editorDeTexto = (EditorDeTexto) jTabbedPane.getComponentAt(i);
 
             if (editorDeTexto.archivoModificado())
-                new EscribeArchivo(EditorUI.this).guardarArchivo(editorDeTexto.getArchivoRuta(), editorDeTexto.getText());
+                new EscribeArchivo(EditorUI.this).guardarArchivo(editorDeTexto.getFile(), editorDeTexto.getText());
         }
     }
 
@@ -588,7 +588,7 @@ public class EditorUI extends JFrame {
         for (int i = 0; i < jTabbedPane.getTabCount(); i ++) {
             editorDeTexto = (EditorDeTexto) jTabbedPane.getComponentAt(i);
 
-            editorDeTexto.actualizarTema(tema);
+            //editorDeTexto.actualizarTema(tema);
         }
     }
 
@@ -596,11 +596,11 @@ public class EditorUI extends JFrame {
         if (jTabbedPane.getTabCount() != 0) {
             EditorDeTexto editor = (EditorDeTexto) jTabbedPane.getSelectedComponent();
 
-            if (listEstadoArch.containsKey(editor.getArchivoRuta())) {
+            if (listEstadoArch.containsKey(editor.getFile().getAbsolutePath())) {
                 //Se obtiene el contenido actual del archivo.
-                String textoArhivo = LeerArchivo.leer(editor.getArchivoRuta());
+                String textoArhivo = LeerArchivo.leer(editor.getFile());
                 //Se extrae el estado del archivo guardado antes de que la ventana se haya deshabilitado.
-                EstadoArchivo textoArchivoAlSalir = listEstadoArch.remove(editor.getArchivoRuta());
+                EstadoArchivo textoArchivoAlSalir = listEstadoArch.remove(editor.getFile().getAbsolutePath());
                 String textoEditor = editor.getText();
 
                 if (textoArchivoAlSalir.isActualizado()) {
@@ -609,7 +609,7 @@ public class EditorUI extends JFrame {
 
                 } else {
                     if (!textoArhivo.equals(textoArchivoAlSalir.getContenido()) && !textoEditor.equals(textoArhivo)) {
-                        if (mostrarDialogoRecargarArchivo(editor.getNombreArchivo()) == 0)
+                        if (mostrarDialogoRecargarArchivo(editor.getFile().getName()) == 0)
                             editor.setText(textoArhivo);
                     }
                 }
@@ -652,15 +652,13 @@ public class EditorUI extends JFrame {
                             EscribeArchivo escribe = new EscribeArchivo(EditorUI.this);
                             if (escribe.guardarArchivo(editor.getText())) {
                                 //Se actualiza el nombre de la pestaña.
-                                tabUpdate(escribe.getNombreArchivo(), jTabbedPane.getSelectedIndex());
+                                tabUpdate(escribe.getFile().getName(), jTabbedPane.getSelectedIndex());
                                 //Se agrega la ruta del archivo guardado.
-                                editor.setArchivoRuta(escribe.getArhivoRuta());
-                                //Nuevo nombre de archivo.
-                                editor.setNombreArchivo(escribe.getNombreArchivo());
+                                editor.setFile(escribe.getFile());
 
                                 //Se actualiza el identificador del archivo.
                                 JPanel panel = (JPanel) jTabbedPane.getTabComponentAt(jTabbedPane.getSelectedIndex());
-                                panel.getComponent(2).setName(escribe.getArhivoRuta());
+                                panel.getComponent(2).setName(escribe.getFile().getAbsolutePath());
                             }
                             break;
 
@@ -876,18 +874,18 @@ public class EditorUI extends JFrame {
                         editorDeTexto = (EditorDeTexto) jTabbedPane.getComponentAt(i);
 
                         //Si el estado del archivo es actualizado hace directamente un break.
-                        estadoArch = listEstadoArch.get(editorDeTexto.getArchivoRuta());
+                        estadoArch = listEstadoArch.get(editorDeTexto.getFile().getAbsolutePath());
                         if (estadoArch != null && estadoArch.isActualizado()) break;
 
                         //Archivo no actualizado.
                         if ((contenido = editorDeTexto.archivoModifRetornaContenido()) != null)
-                            estadoArch = new EstadoArchivo(editorDeTexto.getArchivoRuta(), contenido);
+                            estadoArch = new EstadoArchivo(editorDeTexto.getFile().getAbsolutePath(), contenido);
 
                         //Archivo actualizado.
                         else
-                            estadoArch = new EstadoArchivo(editorDeTexto.getArchivoRuta());
+                            estadoArch = new EstadoArchivo(editorDeTexto.getFile().getAbsolutePath());
 
-                        listEstadoArch.put(editorDeTexto.getArchivoRuta(), estadoArch);
+                        listEstadoArch.put(editorDeTexto.getFile().getAbsolutePath(), estadoArch);
                     }
                 }
             }

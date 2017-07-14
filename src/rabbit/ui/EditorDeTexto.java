@@ -33,7 +33,7 @@ import java.io.File;
 import static rabbit.io.ConfDeUsuario.*;
 
 public class EditorDeTexto extends JPanel {
-    private String archivoRuta, nombreArchivo;
+    private File file;
 
     private RSyntaxTextArea textArea;
     private RTextScrollPane scroll;
@@ -58,9 +58,7 @@ public class EditorDeTexto extends JPanel {
         setLayout(new GridBagLayout());
 
         this.editorUI = editorUI;
-
-        archivoRuta = file.getAbsolutePath();
-        nombreArchivo = file.getName();
+        this.file = file;
 
         textArea = new RSyntaxTextArea();
         textArea.setTabSize(4);
@@ -168,12 +166,12 @@ public class EditorDeTexto extends JPanel {
         textArea.selectAll();
     }
 
-    void setArchivoRuta(String archivoRuta) {
-        this.archivoRuta = archivoRuta;
+    public File getFile() {
+        return file;
     }
 
-    String getArchivoRuta() {
-        return archivoRuta;
+    public void setFile(File file) {
+        this.file = file;
     }
 
     void setText(String text) {
@@ -191,14 +189,6 @@ public class EditorDeTexto extends JPanel {
         return textArea.getText();
     }
 
-    String getNombreArchivo() {
-        return nombreArchivo;
-    }
-
-    void setNombreArchivo(String nombreArchivo) {
-        this.nombreArchivo = nombreArchivo;
-    }
-
     void rehacer() {
         textArea.redoLastAction();
     }
@@ -208,12 +198,12 @@ public class EditorDeTexto extends JPanel {
     }
 
     public String toString () {
-        return nombreArchivo;
+        return file.getName();
     }
 
     public boolean equals (Object o) {
         if (o instanceof EditorDeTexto) {
-            if (archivoRuta.equals(((EditorDeTexto)o).getArchivoRuta()))
+            if (file.getAbsolutePath().equals(((EditorDeTexto)o).getFile().getAbsolutePath()))
                 return true;
         }
 
@@ -221,7 +211,7 @@ public class EditorDeTexto extends JPanel {
     }
 
     public int hashCode () {
-        return archivoRuta.hashCode();
+        return file.getAbsolutePath().hashCode();
     }
 
     void habilitarNumLineas(boolean state) {
@@ -233,13 +223,13 @@ public class EditorDeTexto extends JPanel {
     }
 
     boolean archivoModificado() {
-        String textGuardado = LeerArchivo.leer(archivoRuta);
+        String textGuardado = LeerArchivo.leer(file);
 
         return !textGuardado.equals(textArea.getText());
     }
 
     String archivoModifRetornaContenido() {
-        String textGuardado = LeerArchivo.leer(archivoRuta);
+        String textGuardado = LeerArchivo.leer(file);
         String textEditor = textArea.getText();
 
         if (textGuardado.equals(textEditor)) return null;

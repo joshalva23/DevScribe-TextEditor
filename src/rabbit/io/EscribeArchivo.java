@@ -20,15 +20,13 @@ package rabbit.io;
 
 import rabbit.ui.EditorUI;
 import rabbit.ui.CuadroDeDialogo;
-
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 
 public class EscribeArchivo {
-    private String nombreArchivo, arhivoRuta;
-
     private EditorUI parent;
+    private File file;
 
     public EscribeArchivo (EditorUI parent) {
         this.parent = parent;
@@ -38,16 +36,14 @@ public class EscribeArchivo {
         guardarArchivoValidarExtension(null, text);
     }
 
-    public boolean guardarArchivo (String archivoRuta, String text) {
-        if (archivoRuta == null || text == null)
+    public boolean guardarArchivo (File file, String text) {
+        if (file == null || text == null)
             throw new NullPointerException();
 
         try {
-            //Guardar info del archivo.
-            setArhivoRuta(archivoRuta);
-            setNombreArchivo(new File(archivoRuta).getName());
+            this.file = file;
 
-            String encoding = archivoRuta.endsWith(".sl") ? "latin1" : "UTF-8";
+            String encoding = file.getName().endsWith(".sl") ? "latin1" : "UTF-8";
             escribirArchivo(text, encoding);
 
             return true;
@@ -67,7 +63,7 @@ public class EscribeArchivo {
         if (resp == JFileChooser.APPROVE_OPTION) {
             File file = save.getSelectedFile();
             if (!file.exists()) {
-                guardarArchivo(file.getAbsolutePath(), text);
+                guardarArchivo(file, text);
 
             } else {
                 mostrarMensDeError();
@@ -77,8 +73,8 @@ public class EscribeArchivo {
         return false;
     }
 
-    public boolean guardarArchivoValidarExtension (String archivoRuta, String text) {
-        if (archivoRuta == null) {
+    public boolean guardarArchivoValidarExtension (File archivo, String text) {
+        if (archivo == null) {
             JFileChooser save = new JFileChooser();
             save.setDialogTitle("Nuevo archivo SL");
             save.setPreferredSize(new Dimension(900, 500));
@@ -88,29 +84,26 @@ public class EscribeArchivo {
             if (resp == JFileChooser.APPROVE_OPTION) {
                 File file = save.getSelectedFile();
                 if (!file.exists()) {
-                    try {
-                        if (file.createNewFile()) {
-                            //Añadir extensión si no posee.
-                            if (file.getAbsolutePath().endsWith(".sl")) {
-                                setNombreArchivo(file.getName()); //Se guarda el nombre del archivo.
-                                setArhivoRuta(file.getAbsolutePath()); //Se guarda la ruta del arhivo.
-                            } else {
-                                setNombreArchivo(file.getName() + ".sl");
-                                setArhivoRuta(file.getAbsolutePath() + ".sl");
-                            }
+                    //Añadir extensión si no posee.
+                    if (file.getName().endsWith(".sl")) {
+                        this.file = file;
 
-                            escribirArchivo(text, "latin1");
-                            return true;
-                        }
+                    } else {
+                        this.file = new File (file.getAbsolutePath() + ".sl");
+                    }
+
+                    try {
+                        escribirArchivo(text, "latin1");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    return true;
                 } else {
                     mostrarMensDeError();
                 }
             }
         } else {
-            guardarArchivo(archivoRuta, text);
+            guardarArchivo(archivo, text);
             return true;
         }
 
@@ -121,7 +114,7 @@ public class EscribeArchivo {
         BufferedWriter writer = null;
 
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(getArhivoRuta()), encoding));
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), encoding));
             writer.write(text);
 
         } catch (IOException ex) {
@@ -137,20 +130,11 @@ public class EscribeArchivo {
         CuadroDeDialogo.mostrar(parent, "Error al crear el archivo. El archivo ya existe.", "Error", opcion, CuadroDeDialogo.ERROR);
     }
 
-
-    public void setNombreArchivo (String nombreArchivo) {
-        this.nombreArchivo = nombreArchivo;
+    public File getFile() {
+        return file;
     }
 
-    public String getNombreArchivo () {
-        return nombreArchivo;
-    }
-
-    public String getArhivoRuta() {
-        return arhivoRuta;
-    }
-
-    public void setArhivoRuta(String arhivoRuta) {
-        this.arhivoRuta = arhivoRuta;
+    public void setFile(File file) {
+        this.file = file;
     }
 }

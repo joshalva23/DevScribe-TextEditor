@@ -19,13 +19,13 @@
 package rabbit.io;
 
 import rabbit.ui.EditorUI;
-
 import java.awt.*;
 import java.io.*;
 import javax.swing.*;
 
 public class LeerArchivo {
-    private String nombreArchivo, archivoRuta, text;
+    private File file;
+    private String text;
 
     public LeerArchivo (EditorUI parent) {
         JFileChooser open = new JFileChooser();
@@ -34,23 +34,21 @@ public class LeerArchivo {
 
         final int resp = open.showOpenDialog(parent);
         if (resp == JFileChooser.APPROVE_OPTION) {
-            File file = open.getSelectedFile();
-            nombreArchivo = file.getName();
-            archivoRuta = file.getAbsolutePath();
+            file = open.getSelectedFile();
 
-            text = leer (archivoRuta);
+            text = leer (file);
         }
     }
 
-    public static String leer (String ruta) {
+    public static String leer (File file) {
         StringBuilder text = new StringBuilder();
 
         try {
             BufferedReader reader = null;
 
             try {
-                String encoding = ruta.endsWith(".sl") ? "latin1" : "UTF-8";
-                reader = new BufferedReader(new InputStreamReader(new FileInputStream(ruta), encoding));
+                String encoding = file.getName().endsWith(".sl") ? "latin1" : "UTF-8";
+                reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
 
                 int $char;
                 while (($char = reader.read()) > - 1)
@@ -66,20 +64,12 @@ public class LeerArchivo {
         return text.toString();
     }
 
-    public String getNombreArchivo() {
-        return nombreArchivo;
+    public File getFile() {
+        return file;
     }
 
-    public void setNombreArchivo(String nombreArchivo) {
-        this.nombreArchivo = nombreArchivo;
-    }
-
-    public String getArchivoRuta() {
-        return archivoRuta;
-    }
-
-    public void setArchivoRuta(String archivoRuta) {
-        this.archivoRuta = archivoRuta;
+    public void setFile(File file) {
+        this.file = file;
     }
 
     public String getText() {
@@ -91,6 +81,6 @@ public class LeerArchivo {
     }
 
     public boolean archivoLeido () {
-        return archivoRuta != null;
+        return file != null;
     }
 }
