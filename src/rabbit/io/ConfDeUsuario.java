@@ -44,6 +44,10 @@ public class ConfDeUsuario {
         prefs.putInt(key, value);
     }
 
+    public static void putString (String key, String value) {
+        prefs.put(key, value);
+    }
+
     public static boolean getBoolean (String key) {
         return prefs.getBoolean(key, true);
     }
@@ -52,5 +56,11 @@ public class ConfDeUsuario {
         int defaultValue = key.equals(KEY_FUENTE_TAMANIO) ? 12 : 0;
 
         return prefs.getInt(key, defaultValue);
+    }
+
+    public static String getString (String key) {
+        String defaultValue = key.equals(KEY_TEMA) ? "intelli-j" : null;
+
+        return prefs.get(key, defaultValue);
     }
 }
