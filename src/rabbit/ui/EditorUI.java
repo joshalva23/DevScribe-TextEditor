@@ -28,9 +28,9 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
+import java.util.List;
 
 import static rabbit.io.ConfDeUsuario.*;
 
@@ -90,6 +90,21 @@ public class EditorUI extends JFrame {
         setJMenuBar(confBarraDeMenu());
 
         setVisible(true);
+
+        SwingUtilities.invokeLater(this::restaurarArchivosAbiertos);
+    }
+
+    private void restaurarArchivosAbiertos () {
+        List<String> listRuta = ConfDeUsuario.getRutasDeArchivos();
+        File path;
+
+        for (String r : listRuta) {
+            path = new File (r);
+
+            if (path.exists()) {
+                insertarNuevoEditor(new EditorDeTexto(path, LeerArchivo.leer(path), EditorUI.this));
+            }
+        }
     }
 
     private void confBarraDeHerramientas () {
@@ -547,16 +562,21 @@ public class EditorUI extends JFrame {
         }
     }
 
-    public void guardarArchivo (EditorDeTexto editor) {
+    void guardarArchivo(EditorDeTexto editor) {
         new EscribeArchivo(this).guardarArchivo(editor.getFile(), editor.getText());
     }
 
     private void cerrarPrograma () {
-        java.util.List <EditorDeTexto> list = new ArrayList<>();
+        List<String> listArchivosRuta = new ArrayList<>(jTabbedPane.getTabCount());
+        List <EditorDeTexto> list = new ArrayList<>();
         EditorDeTexto editorDeTexto;
+
         for (int i = 0; i < jTabbedPane.getTabCount(); i++) {
             //Obtengo la información de los archivos abiertos.
             editorDeTexto = (EditorDeTexto) jTabbedPane.getComponentAt(i);
+            //Se guarda la ruta de los archivos abiertos.
+            listArchivosRuta.add(editorDeTexto.getFile().getAbsolutePath());
+
             if (editorDeTexto.archivoModificado())
                 list.add(editorDeTexto);
         }
@@ -575,13 +595,16 @@ public class EditorUI extends JFrame {
                 }
 
             case 0 :
+                ConfDeUsuario.putRutasDeArchivos (listArchivosRuta);
                 System.exit(0);
 
             default :
                 ventInternaActivada = true;
                 int resp = DialogoGuardarVarios.mostrarDialogo(EditorUI.this, list);
-                if (resp == DialogoGuardarVarios.OPER_TERMINADA)
+                if (resp == DialogoGuardarVarios.OPER_TERMINADA) {
+                    ConfDeUsuario.putRutasDeArchivos (listArchivosRuta);
                     System.exit(0);
+                }
         }
     }
 
@@ -949,7 +972,6 @@ public class EditorUI extends JFrame {
 
         @Override
         public void windowClosing(WindowEvent e) {
-            //TODO: Debo guardar la ruta de los archivos abiertos, antes de salir.
             cerrarPrograma();
         }
     }
