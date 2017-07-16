@@ -41,7 +41,7 @@ public class EditorUI extends JFrame {
                     jmiSalir, jmiDeshacer, jmiRehacer, jmiCopiar, jmiCortar, jmiPegar, jmiSelecTodo, jmiAumentarFuente,
                     jmiDisminuirFuente, jmiTamanioOriginal, jmiAyuda, jmiAcercaDeRabbit;
 
-    private JCheckBoxMenuItem jcbGuiasDeIndentacion, jcbNumDeLineas, jcbToolBar, jcbIntelliJ, jcbDarcula;
+    private JCheckBoxMenuItem jcbGuiasDeIndentacion, jcbNumDeLineas, jcbToolBar;
 
     private JButton jbNuevoArchivo, jbGuardarTodo, jbRehacer, jbDeshacer, jbCopiar, jbPegar, jbCortar,
             jbAyuda, jbAbrirArchivoNuevo;
@@ -288,21 +288,79 @@ public class EditorUI extends JFrame {
     }
 
     private void confMenuTema (JMenu menu) {
+        String nombreTema = ConfDeUsuario.getString(KEY_TEMA);
         ButtonGroup group = new ButtonGroup();
-        boolean temaIntellij = ConfDeUsuario.getInt(KEY_TEMA) == EditorColor.INTELLIJ;
+        JRadioButtonMenuItem menuItem;
 
-        jcbIntelliJ = new JCheckBoxMenuItem("IntelliJ", temaIntellij);
-        jcbIntelliJ.setActionCommand("jcbIntelliJ");
-        jcbIntelliJ.addActionListener(e);
-        group.add(jcbIntelliJ);
+        menuItem = new JRadioButtonMenuItem("IntelliJ");
+        menuItem.setActionCommand("intelli-j");
+        menuItem.setSelected(menuItem.getActionCommand().equals(nombreTema));
+        menuItem.addActionListener(e);
+        group.add(menuItem);
+        menu.add(menuItem);
 
-        jcbDarcula = new JCheckBoxMenuItem("Darcula", !temaIntellij);
-        jcbDarcula.setActionCommand("jcbDarcula");
-        jcbDarcula.addActionListener(e);
-        group.add(jcbDarcula);
+        menuItem = new JRadioButtonMenuItem("Darcula");
+        menuItem.setActionCommand("darcula");
+        menuItem.setSelected(menuItem.getActionCommand().equals(nombreTema));
+        menuItem.addActionListener(e);
+        group.add(menuItem);
+        menu.add(menuItem);
 
-        menu.add(jcbIntelliJ);
-        menu.add(jcbDarcula);
+        menuItem = new JRadioButtonMenuItem("Dark");
+        menuItem.setActionCommand("dark");
+        menuItem.setSelected(menuItem.getActionCommand().equals(nombreTema));
+        menuItem.addActionListener(e);
+        group.add(menuItem);
+        menu.add(menuItem);
+
+        menuItem = new JRadioButtonMenuItem("Darkii");
+        menuItem.setActionCommand("darkii");
+        menuItem.setSelected(menuItem.getActionCommand().equals(nombreTema));
+        menuItem.addActionListener(e);
+        group.add(menuItem);
+        menu.add(menuItem);
+
+        menuItem = new JRadioButtonMenuItem("RSTA 1");
+        menuItem.setActionCommand("default");
+        menuItem.setSelected(menuItem.getActionCommand().equals(nombreTema));
+        menuItem.addActionListener(e);
+        group.add(menuItem);
+        menu.add(menuItem);
+
+        menuItem = new JRadioButtonMenuItem("RSTA 2");
+        menuItem.setActionCommand("default-alt");
+        menuItem.setSelected(menuItem.getActionCommand().equals(nombreTema));
+        menuItem.addActionListener(e);
+        group.add(menuItem);
+        menu.add(menuItem);
+
+        menuItem = new JRadioButtonMenuItem("Eclipse");
+        menuItem.setActionCommand("eclipse");
+        menuItem.setSelected(menuItem.getActionCommand().equals(nombreTema));
+        menuItem.addActionListener(e);
+        group.add(menuItem);
+        menu.add(menuItem);
+
+        menuItem = new JRadioButtonMenuItem("Idle");
+        menuItem.setActionCommand("idle");
+        menuItem.setSelected(menuItem.getActionCommand().equals(nombreTema));
+        menuItem.addActionListener(e);
+        group.add(menuItem);
+        menu.add(menuItem);
+
+        menuItem = new JRadioButtonMenuItem("Monokai");
+        menuItem.setActionCommand("monokai");
+        menuItem.setSelected(menuItem.getActionCommand().equals(nombreTema));
+        menuItem.addActionListener(e);
+        group.add(menuItem);
+        menu.add(menuItem);
+
+        menuItem = new JRadioButtonMenuItem("Visual Studio");
+        menuItem.setActionCommand("vs");
+        menuItem.setSelected(menuItem.getActionCommand().equals(nombreTema));
+        menuItem.addActionListener(e);
+        group.add(menuItem);
+        menu.add(menuItem);
     }
 
     private void confMenuAyuda (JMenu menu) {
@@ -583,12 +641,12 @@ public class EditorUI extends JFrame {
         }
     }
 
-    private void actTemaDeTodosLosEditores (int tema) {
+    private void actTemaDeTodosLosEditores (String nombreTema) {
         EditorDeTexto editorDeTexto;
         for (int i = 0; i < jTabbedPane.getTabCount(); i ++) {
             editorDeTexto = (EditorDeTexto) jTabbedPane.getComponentAt(i);
 
-            //editorDeTexto.actualizarTema(tema);
+            editorDeTexto.actualizarTema(nombreTema);
         }
     }
 
@@ -698,20 +756,18 @@ public class EditorUI extends JFrame {
                             editor.deshacer();
                             break;
 
-                        case "jcbIntelliJ" :
-                            if (jcbIntelliJ.isSelected() && EditorColor.tema == EditorColor.DARCULA) {
-                                ConfDeUsuario.putInt(KEY_TEMA, EditorColor.INTELLIJ); //Se guarda nuevo tema.
-
-                                actTemaDeTodosLosEditores(EditorColor.INTELLIJ);
-                            }
-                            break;
-
-                        case "jcbDarcula" :
-                            if (jcbDarcula.isSelected() && EditorColor.tema == EditorColor.INTELLIJ) {
-                                ConfDeUsuario.putInt(KEY_TEMA, EditorColor.DARCULA); //Se guarda nuevo tema.
-
-                                actTemaDeTodosLosEditores(EditorColor.DARCULA);
-                            }
+                        case "darcula" :
+                        case "dark" :
+                        case "darkii" :
+                        case "default":
+                        case "default-alt" :
+                        case "eclipse" :
+                        case "idle" :
+                        case "intelli-j" :
+                        case "monokai" :
+                        case "vs" :
+                            ConfDeUsuario.putString(KEY_TEMA, e.getActionCommand());
+                            actTemaDeTodosLosEditores(e.getActionCommand());
                             break;
 
                         case "jmiAumentarFuente" :
