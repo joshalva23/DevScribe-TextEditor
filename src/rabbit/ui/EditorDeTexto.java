@@ -20,6 +20,7 @@ package rabbit.ui;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import rabbit.io.ConfDeUsuario;
@@ -29,6 +30,8 @@ import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import static rabbit.io.ConfDeUsuario.*;
 
@@ -67,7 +70,6 @@ public class EditorDeTexto extends JPanel {
         textArea.setCodeFoldingEnabled(true);
         textArea.setPaintTabLines(ConfDeUsuario.getBoolean(KEY_GUIAS_IDENTACION));
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
-        textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize));
 
         if (text == null) {
             textArea.setText("inicio\n\tcls()\n\t\nfin"); //Texto que tendra por defecto.
@@ -88,10 +90,9 @@ public class EditorDeTexto extends JPanel {
             EditorDeTexto.this.editorUI.actualizarMenuItem (textArea.canUndo(), textArea.canRedo())
         );
 
-        //confMenuEmergente();
         confPanelEditor();
+        actualizarTema(ConfDeUsuario.getString(KEY_TEMA));
         confPanelPosicionCursor ();
-        //confEstiloYFormato();
         actualizarPosCursor(textArea.getCaretPosition());
 
         GridBagConstraints conf = new GridBagConstraints();
@@ -132,7 +133,6 @@ public class EditorDeTexto extends JPanel {
         scroll = new RTextScrollPane(textArea);
         scroll.getGutter().setBorder(new Gutter.GutterBorder(0, 0, 0, 5));
         scroll.getGutter().setLayout(new BorderLayout(10, 0));
-        scroll.getGutter().setLineNumberFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize));
         scroll.setFoldIndicatorEnabled(true);
         scroll.setLineNumbersEnabled(ConfDeUsuario.getBoolean(KEY_NUM_LINEA));
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -237,8 +237,17 @@ public class EditorDeTexto extends JPanel {
         return textGuardado;
     }
 
-    void actualizarTema() {
+    void actualizarTema(String nombreTema) {
+        try {
+            String ruta = "src/rabbit/theme/" + nombreTema + ".xml";
 
+            Theme theme = Theme.load(new FileInputStream(ruta));
+            theme.apply(textArea);
+            actualizarFuente();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     void actualizarFuente() {
