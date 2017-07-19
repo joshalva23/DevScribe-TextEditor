@@ -412,6 +412,7 @@ public class EditorUI extends JFrame {
         jmiGuardar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 
         jmiGuardarComo = new JMenuItem("Guardar como");
+        jmiGuardarComo.setActionCommand("jmiGuardarComo");
         jmiGuardarComo.addActionListener(e);
 
         jmiGuardarTodo = new JMenuItem("Guardar todo");
