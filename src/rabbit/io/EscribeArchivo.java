@@ -63,11 +63,9 @@ public class EscribeArchivo {
         if (resp == JFileChooser.APPROVE_OPTION) {
             File file = save.getSelectedFile();
             if (!file.exists()) {
-                guardarArchivo(file, text);
-
-            } else {
-                mostrarMensDeError();
+                return guardarArchivo(file, text);
             }
+            mostrarMensDeError();
         }
 
         return false;
