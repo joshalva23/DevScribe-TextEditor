@@ -699,6 +699,23 @@ public class EditorUI extends JFrame {
         }
     }
 
+    private void existeArchivo () {
+        int tabCount = jTabbedPane.getTabCount();
+
+        if (tabCount != 0) {
+            EditorDeTexto editor;
+
+            for (int i = tabCount - 1; i >= 0; i --) {
+                editor = (EditorDeTexto) jTabbedPane.getComponentAt(i);
+
+                if (!editor.getFile().exists()) {
+                    jTabbedPane.remove(i);
+                    listEstadoArch.remove(editor.getFile().getAbsolutePath());
+                }
+            }
+        }
+    }
+
     //Actualiza la fuente de todos los editores abiertos.
     private void actFuentDeTodosLosEditores () {
         EditorDeTexto editorDeTexto;
@@ -933,10 +950,11 @@ public class EditorUI extends JFrame {
     private class EventosDeVentana extends WindowAdapter {
         @Override
         public void windowActivated(WindowEvent e) {
-            if (!ventInternaActivada)
+            if (!ventInternaActivada) {
+                existeArchivo();
                 recargadoAutomatico();
 
-            else
+            } else
                 ventInternaActivada = false;
         }
 
