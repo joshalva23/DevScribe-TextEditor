@@ -70,6 +70,7 @@ public class EditorDeTexto extends JPanel {
         textArea.setFocusable(true);
         textArea.setMarkOccurrences(true);
         textArea.setCodeFoldingEnabled(true);
+        textArea.setClearWhitespaceLinesEnabled(false);
 
         InputMap map = textArea.getInputMap();
         KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, InputEvent.CTRL_MASK);
