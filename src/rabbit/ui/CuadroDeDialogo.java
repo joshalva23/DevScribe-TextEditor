@@ -27,7 +27,7 @@ import java.awt.event.WindowEvent;
 
 public class CuadroDeDialogo extends JDialog implements ActionListener {
     private int indexBoton;
-    public static final int INFORMACION = 0, ERROR = 1;
+    public static final int INFORMACION = 0, ERROR = 1, ADVERTENCIA = 2;
 
     private CuadroDeDialogo(JFrame padre, String mens, String titulo, String[] opciones, int tipoMens) {
         super(padre, true);
@@ -51,11 +51,17 @@ public class CuadroDeDialogo extends JDialog implements ActionListener {
         conf.insets = new Insets(30, 10, 30, 10);
 
         JLabel icono;
-        if (tipoMens == INFORMACION)
-            icono = new JLabel(new ImageIcon(getClass().getResource("icono/dialogoPreg.png")));
-        else
-            icono = new JLabel(new ImageIcon(getClass().getResource("icono/dialogoError.png")));
-
+        switch (tipoMens) {
+            case INFORMACION:
+                icono = new JLabel(new ImageIcon(getClass().getResource("icono/dialogoPreg.png")));
+                break;
+            case ERROR:
+                icono = new JLabel(new ImageIcon(getClass().getResource("icono/dialogoError.png")));
+                break;
+            default:
+                icono = new JLabel(new ImageIcon(getClass().getResource("icono/dialogoAdvertencia.png")));
+                break;
+        }
         add(icono, conf);
 
         //Componente de la fila 0 columna 1.
