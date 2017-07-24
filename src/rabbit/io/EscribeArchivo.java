@@ -62,13 +62,24 @@ public class EscribeArchivo {
         final int resp = save.showSaveDialog(parent); //Obtener ruta en donde se guardara el archivo.
         if (resp == JFileChooser.APPROVE_OPTION) {
             File file = save.getSelectedFile();
-            if (!file.exists()) {
-                return guardarArchivo(file, text);
+            if (file.exists()) {
+                int r = mostrarMensajeReemplazarArchivo(file.getName());
+                //NO = 1.
+                if (r == 1) return false;
             }
-            mostrarMensDeError();
+
+            return guardarArchivo(file, text);
         }
 
         return false;
+    }
+
+    private int mostrarMensajeReemplazarArchivo(String nameFile) {
+        String [] bt = {"Si", "No"};
+        int r = CuadroDeDialogo.mostrar(parent, nameFile + " ya existe. ¿Desea reemplazarlo?",
+                "Confirmar guardar como", bt, CuadroDeDialogo.ADVERTENCIA);
+
+        return r;
     }
 
     public boolean guardarArchivoValidarExtension (File archivo, String text) {
@@ -81,24 +92,29 @@ public class EscribeArchivo {
             final int resp = save.showSaveDialog(parent); //Obtener ruta en donde se guardara el archivo.
             if (resp == JFileChooser.APPROVE_OPTION) {
                 File file = save.getSelectedFile();
-                if (!file.exists()) {
-                    //Añadir extensión si no posee.
-                    if (file.getName().endsWith(".sl")) {
-                        this.file = file;
+                //Añadir extensión si no posee.
+                if (file.getName().endsWith(".sl")) {
+                    this.file = file;
 
-                    } else {
-                        this.file = new File (file.getAbsolutePath() + ".sl");
-                    }
-
-                    try {
-                        escribirArchivo(text, "latin1");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return true;
                 } else {
-                    mostrarMensDeError();
+                    this.file = new File (file.getAbsolutePath() + ".sl");
                 }
+
+                if (this.file.exists()) {
+                    int r = mostrarMensajeReemplazarArchivo(this.file.getName());
+                    //NO = 1.
+                    if (r == 1) {
+                        this.file = null;
+                        return false;
+                    }
+                }
+
+                try {
+                    escribirArchivo(text, "latin1");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return true;
             }
         } else {
             guardarArchivo(archivo, text);
@@ -121,11 +137,6 @@ public class EscribeArchivo {
         } finally {
             if (writer != null) writer.close();
         }
-    }
-
-    private void mostrarMensDeError () {
-        String [] opcion = {"Aceptar"};
-        CuadroDeDialogo.mostrar(parent, "Error al crear el archivo. El archivo ya existe.", "Error", opcion, CuadroDeDialogo.ERROR);
     }
 
     public File getFile() {
