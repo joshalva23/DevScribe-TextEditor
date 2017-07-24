@@ -18,9 +18,9 @@
 
 package rabbit.ui;
 
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rsyntaxtextarea.*;
+import org.fife.ui.rsyntaxtextarea.templates.CodeTemplate;
+import org.fife.ui.rsyntaxtextarea.templates.StaticCodeTemplate;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import rabbit.io.ConfDeUsuario;
@@ -29,6 +29,8 @@ import rabbit.io.LeerArchivo;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -68,8 +70,11 @@ public class EditorDeTexto extends JPanel {
         textArea.setFocusable(true);
         textArea.setMarkOccurrences(true);
         textArea.setCodeFoldingEnabled(true);
-        textArea.setPaintTabLines(ConfDeUsuario.getBoolean(KEY_GUIAS_IDENTACION));
-        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+
+        InputMap map = textArea.getInputMap();
+        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, InputEvent.CTRL_MASK);
+        String actionName = RSyntaxTextAreaEditorKit.rstaPossiblyInsertTemplateAction;
+        map.put(ks, actionName);
 
         if (text == null) {
             textArea.setText("inicio\n\tcls()\n\t\nfin"); //Texto que tendra por defecto.
@@ -94,6 +99,14 @@ public class EditorDeTexto extends JPanel {
         actualizarTema(ConfDeUsuario.getString(KEY_TEMA));
         confPanelPosicionCursor ();
         actualizarPosCursor(textArea.getCaretPosition());
+
+        RSyntaxTextArea.setTemplatesEnabled(true);
+        CodeTemplateManager ctm = RSyntaxTextArea.getCodeTemplateManager();
+
+        //Se añaden las plantillas de código.
+        for (CodeTemplate ct : getCodeTemplate()) {
+            ctm.addTemplate(ct);
+        }
 
         GridBagConstraints conf = new GridBagConstraints();
 
@@ -255,5 +268,28 @@ public class EditorDeTexto extends JPanel {
 
         textArea.setFont(font);
         scroll.getGutter().setLineNumberFont(font);
+    }
+
+    private CodeTemplate[] getCodeTemplate() {
+        CodeTemplate[] ct = {
+                new StaticCodeTemplate("dh", "desde ", " = 1 hasta 10 {\n\t\n}"),
+                new StaticCodeTemplate("rh", "repetir\n\t\nhasta (", ")"),
+                new StaticCodeTemplate("m", "mientras (", ") {\n\t\n}"),
+                new StaticCodeTemplate("i", "imprimir ('", "')"),
+                new StaticCodeTemplate("l", "leer (", ")"),
+                new StaticCodeTemplate("c", "cls()", null),
+                new StaticCodeTemplate("if", "inicio\n\t", "\nfin"),
+                new StaticCodeTemplate("s", "si (", ") {\n\t\n}"),
+                new StaticCodeTemplate("ss", "si (", ") {\n\t\nsino\n\t\n}"),
+                new StaticCodeTemplate("sss", "si (", ") {\n\t\nsino si ()\n\t\n}"),
+                new StaticCodeTemplate("ec", "eval {\n\tcaso (", ")\n\t\t\n}"),
+                new StaticCodeTemplate("vif", "var\n\t", "\ninicio\n\t\nfin"),
+                new StaticCodeTemplate("tif", "tipos\n\t", "\ninicio\n\t\nfin"),
+                new StaticCodeTemplate("cif", "const\n\t", "\ninicio\n\t\nfin"),
+                new StaticCodeTemplate("srif", "sub ", " () retorna \ninicio\n\t\nfin"),
+                new StaticCodeTemplate("sif", "sub ", " ()\ninicio\n\t\nfin")
+        };
+
+        return ct;
     }
 }
