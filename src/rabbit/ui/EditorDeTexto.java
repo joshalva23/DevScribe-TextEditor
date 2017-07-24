@@ -19,6 +19,8 @@
 package rabbit.ui;
 
 import org.fife.ui.rsyntaxtextarea.*;
+import org.fife.ui.rsyntaxtextarea.folding.CurlyFoldParser;
+import org.fife.ui.rsyntaxtextarea.folding.FoldParserManager;
 import org.fife.ui.rsyntaxtextarea.templates.CodeTemplate;
 import org.fife.ui.rsyntaxtextarea.templates.StaticCodeTemplate;
 import org.fife.ui.rtextarea.Gutter;
@@ -71,6 +73,11 @@ public class EditorDeTexto extends JPanel {
         textArea.setMarkOccurrences(true);
         textArea.setCodeFoldingEnabled(true);
         textArea.setClearWhitespaceLinesEnabled(false);
+
+        AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
+        atmf.putMapping("text/sl", "rabbit.ui.SLTokenMaker");
+        textArea.setSyntaxEditingStyle("text/sl");
+        textArea.setPaintTabLines(ConfDeUsuario.getBoolean(KEY_GUIAS_IDENTACION));
 
         InputMap map = textArea.getInputMap();
         KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, InputEvent.CTRL_MASK);
