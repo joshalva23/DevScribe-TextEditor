@@ -628,7 +628,7 @@ public class EditorUI extends JFrame {
     private void nuevoArchivo () {
         ventInternaActivada = true;
         EscribeArchivo writer = new EscribeArchivo(EditorUI.this);
-        if (writer.guardarArchivoValidarExtension(null, "inicio\n  cls()\n  \nfin"))
+        if (writer.guardarArchivoValidarExtension(null, "inicio\n\tcls()\n\t\nfin"))
             insertarNuevoEditor(new EditorDeTexto(writer.getFile(), null, EditorUI.this));
     }
 
