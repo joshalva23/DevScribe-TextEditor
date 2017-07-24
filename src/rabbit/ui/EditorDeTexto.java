@@ -74,6 +74,8 @@ public class EditorDeTexto extends JPanel {
         textArea.setCodeFoldingEnabled(true);
         textArea.setClearWhitespaceLinesEnabled(false);
 
+        FoldParserManager.get().addFoldParserMapping("text/sl", new CurlyFoldParser());
+
         AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
         atmf.putMapping("text/sl", "rabbit.ui.SLTokenMaker");
         textArea.setSyntaxEditingStyle("text/sl");
