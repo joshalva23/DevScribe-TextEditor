@@ -29,6 +29,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -494,7 +495,6 @@ public class EditorUI extends JFrame {
         if (editor.archivoModificado()) {
             switch (mostrarDialogoGuardarCambios(editor.getFile().getName())) {
                 case 0 :
-                    //TODO : Debo comprobar si se pudo guardar para cerrarlo.
                     new EscribeArchivo(this).guardarArchivo(editor.getFile(), editor.getText());
                     break;
 
@@ -587,7 +587,6 @@ public class EditorUI extends JFrame {
                 EditorDeTexto editor = list.get(0);
                 switch (mostrarDialogoGuardarCambios(editor.getFile().getName())) {
                     case 0: //Guardar el archivo.
-                        //TODO : Debo comprobar si se pudo guardar para cerrarlo.
                         new EscribeArchivo(this).guardarArchivo(editor.getFile(), editor.getText());
                         break;
 
@@ -713,6 +712,15 @@ public class EditorUI extends JFrame {
                     listEstadoArch.remove(editor.getFile().getAbsolutePath());
                 }
             }
+        }
+    }
+
+    private void cargarDocumentacion () {
+
+        try {
+            Desktop.getDesktop().open(new File ("src/rabbit/ui/documentacion.html"));
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
     }
 
@@ -904,7 +912,7 @@ public class EditorUI extends JFrame {
                             break;
 
                         case "jmiAyuda" :
-                            new Ayuda(EditorUI.this);
+                            cargarDocumentacion();
                             break;
                     }
             }
@@ -942,7 +950,7 @@ public class EditorUI extends JFrame {
                     editor.pegar();
 
                 else if (e.getSource() == jbAyuda)
-                    new Ayuda(EditorUI.this);
+                    cargarDocumentacion();
             }
         }
     }
