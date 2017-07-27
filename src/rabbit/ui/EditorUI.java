@@ -921,6 +921,10 @@ public class EditorUI extends JFrame {
                         case "jmiAyuda" :
                             cargarDocumentacion();
                             break;
+
+                        case "jmiAcercaDeRabbit":
+                            new AcercaDeRabbit(EditorUI.this);
+                            break;
                     }
             }
         }
