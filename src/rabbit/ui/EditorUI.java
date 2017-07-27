@@ -27,6 +27,11 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -68,6 +73,7 @@ public class EditorUI extends JFrame {
         e = new EventosMenuItem();
 
         jTabbedPane = new JTabbedPane();
+        new DropTarget(jTabbedPane, new EventoDesplazamiento());
         jTabbedPane.setFocusable(false);
         jTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         jTabbedPane.addChangeListener(new ChangeListener() {
@@ -520,6 +526,7 @@ public class EditorUI extends JFrame {
     }
 
     private void insertarNuevoEditor (EditorDeTexto editor) {
+        new DropTarget(editor.getComponent(), new EventoDesplazamiento());
         jTabbedPane.add(editor);
 
         int index = jTabbedPane.getTabCount() - 1;
@@ -1000,6 +1007,45 @@ public class EditorUI extends JFrame {
         @Override
         public void windowClosing(WindowEvent e) {
             cerrarPrograma();
+        }
+    }
+
+    private class EventoDesplazamiento extends DropTargetAdapter {
+
+        @Override
+        public void drop(DropTargetDropEvent e) {
+            try {
+                e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                List list = (List) e.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+
+                for (int k = 0; k < list.size(); k ++) {
+                    File file = (File) list.get(k);
+
+                    if (file.isFile()) {
+                        EditorDeTexto editorDeTexto;
+                        int tabCount = jTabbedPane.getTabCount();
+                        int i;
+
+                        for (i = 0; i < tabCount; i ++) {
+                            editorDeTexto = (EditorDeTexto) jTabbedPane.getComponentAt(i);
+                            //Compruebo si el arhivo que se desea abrir ya esta abierto.
+                            if (editorDeTexto.getFile().getAbsolutePath().equals(file.getAbsolutePath())) {
+                                if (editorDeTexto.archivoModificado())
+                                    editorDeTexto.setText(LeerArchivo.leer(file)); //Recargar el archivo.
+
+                                if (k == list.size() - 1) jTabbedPane.setSelectedIndex(i);
+                                break;
+                            }
+                        }
+
+                        if (tabCount == i) //Compruebo si el archivo no ha sido abierto.
+                            insertarNuevoEditor(new EditorDeTexto(file, EditorUI.this));
+                    }
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 }
