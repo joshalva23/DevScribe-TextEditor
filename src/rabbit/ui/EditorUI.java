@@ -942,6 +942,7 @@ public class EditorUI extends JFrame {
                             break;
 
                         case "jmiAcercaDeRabbit":
+                            ventInternaActivada = true;
                             new AcercaDeRabbit(EditorUI.this);
                             break;
 
@@ -1014,9 +1015,9 @@ public class EditorUI extends JFrame {
                     for (int i = 0; i < tabCount; i++) {
                         editorDeTexto = (EditorDeTexto) jTabbedPane.getComponentAt(i);
 
-                        //Si el estado del archivo es actualizado hace directamente un break.
+                        //Si el estado del archivo es actualizado no se comprueba si su contenido se ha alterado.
                         estadoArch = listEstadoArch.get(editorDeTexto.getFile().getAbsolutePath());
-                        if (estadoArch != null && estadoArch.isActualizado()) break;
+                        if (estadoArch != null && estadoArch.isActualizado()) continue;
 
                         //Archivo no actualizado.
                         if ((contenido = editorDeTexto.archivoModifRetornaContenido()) != null)
