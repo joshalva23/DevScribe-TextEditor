@@ -725,7 +725,7 @@ public class EditorUI extends JFrame {
     private void cargarDocumentacion () {
 
         try {
-            Desktop.getDesktop().open(new File ("src/rabbit/ui/documentacion.html"));
+            Desktop.getDesktop().open(new File ("src/rabbit/recurso/documentacion.html"));
         } catch (IOException e1) {
             e1.printStackTrace();
         }
