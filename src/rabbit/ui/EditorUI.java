@@ -158,7 +158,7 @@ public class EditorUI extends JFrame {
         jbDeshacer.addActionListener(e);
 
         jbAyuda = new JButton(new ImageIcon(getClass().getResource("icono/ayuda.png")));
-        jbAyuda.setToolTipText("Ayuda");
+        jbAyuda.setToolTipText("Ayuda (F1)");
         jbAyuda.setFocusable(false);
         jbAyuda.addActionListener(e);
 
@@ -387,6 +387,7 @@ public class EditorUI extends JFrame {
 
     private void confMenuAyuda (JMenu menu) {
         jmiAyuda = new JMenuItem("Ayuda");
+        jmiAyuda.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
         jmiAyuda.setIcon(new ImageIcon(getClass().getResource("icono/ayuda.png")));
         jmiAyuda.addActionListener(e);
         jmiAyuda.setActionCommand("jmiAyuda");
