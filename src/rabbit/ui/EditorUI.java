@@ -45,7 +45,7 @@ public class EditorUI extends JFrame {
 
     private JMenuItem jmiNuevoArchivo, jmiAbrirArchivo, jmiGuardar, jmiGuardarComo, jmiGuardarTodo, jmiCerrarPestania,
                     jmiSalir, jmiDeshacer, jmiRehacer, jmiCopiar, jmiCortar, jmiPegar, jmiSelecTodo, jmiAumentarFuente,
-                    jmiDisminuirFuente, jmiTamanioOriginal, jmiAyuda, jmiAcercaDeRabbit;
+                    jmiDisminuirFuente, jmiTamanioOriginal, jmiAyuda, jmiAcercaDeRabbit, jmiAtajosDeTeclado;
 
     private JCheckBoxMenuItem jcbGuiasDeIndentacion, jcbNumDeLineas, jcbToolBar;
 
@@ -395,7 +395,13 @@ public class EditorUI extends JFrame {
         jmiAcercaDeRabbit.addActionListener(e);
         jmiAcercaDeRabbit.setActionCommand("jmiAcercaDeRabbit");
 
+        jmiAtajosDeTeclado = new JMenuItem("Atajos de teclado");
+        jmiAtajosDeTeclado.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+        jmiAtajosDeTeclado.addActionListener(e);
+        jmiAtajosDeTeclado.setActionCommand("jmiAtajosDeTeclado");
+
         menu.add(jmiAyuda);
+        menu.add(jmiAtajosDeTeclado);
         menu.addSeparator();
         menu.add(jmiAcercaDeRabbit);
     }
@@ -723,9 +729,16 @@ public class EditorUI extends JFrame {
     }
 
     private void cargarDocumentacion () {
-
         try {
             Desktop.getDesktop().open(new File ("src/rabbit/recurso/documentacion.html"));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    private void metodoAbreviadoDeTeclados () {
+        try {
+            Desktop.getDesktop().open(new File ("src/rabbit/recurso/atajo_de_teclado.pdf"));
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -925,6 +938,11 @@ public class EditorUI extends JFrame {
                         case "jmiAcercaDeRabbit":
                             new AcercaDeRabbit(EditorUI.this);
                             break;
+
+                        case "jmiAtajosDeTeclado":
+                            metodoAbreviadoDeTeclados();
+                            break;
+
                     }
             }
         }
