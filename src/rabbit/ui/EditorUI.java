@@ -18,10 +18,10 @@
 
 package rabbit.ui;
 
-import rabbit.util.EstadoArchivo;
 import rabbit.io.ConfDeUsuario;
 import rabbit.io.EscribeArchivo;
 import rabbit.io.LeerArchivo;
+import rabbit.util.EstadoArchivo;
 
 import java.awt.*;
 import javax.swing.*;
@@ -103,7 +103,7 @@ public class EditorUI extends JFrame {
             path = new File (r);
 
             if (path.exists()) {
-                insertarNuevoEditor(new EditorDeTexto(path, LeerArchivo.leer(path), EditorUI.this));
+                insertarNuevoEditor(new EditorDeTexto(path, this));
             }
         }
     }
@@ -626,14 +626,14 @@ public class EditorUI extends JFrame {
 
     private void nuevoArchivo () {
         ventInternaActivada = true;
-        EscribeArchivo writer = new EscribeArchivo(EditorUI.this);
+        EscribeArchivo writer = new EscribeArchivo(this);
         if (writer.guardarArchivoValidarExtension(null, "inicio\n\tcls()\n\t\nfin"))
-            insertarNuevoEditor(new EditorDeTexto(writer.getFile(), null, EditorUI.this));
+            insertarNuevoEditor(new EditorDeTexto(writer.getFile(), 15, this));
     }
 
     private void abrirArchivo () {
         ventInternaActivada = true;
-        LeerArchivo read = new LeerArchivo(EditorUI.this);
+        LeerArchivo read = new LeerArchivo(this);
         if (read.archivoLeido()) { //Compruebo si el archivo se pudo leer.
             EditorDeTexto editorDeTexto;
             int i, tabCount = jTabbedPane.getTabCount();
@@ -650,7 +650,7 @@ public class EditorUI extends JFrame {
                 }
             }
             if (tabCount == i) //Compruebo si el archivo no ha sido abierto.
-                insertarNuevoEditor(new EditorDeTexto(read.getFile(), read.getText(), EditorUI.this));
+                insertarNuevoEditor(new EditorDeTexto(read.getFile(), this));
         }
     }
 

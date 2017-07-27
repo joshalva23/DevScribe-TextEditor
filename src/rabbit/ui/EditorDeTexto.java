@@ -57,11 +57,11 @@ public class EditorDeTexto extends JPanel {
         fontSize = ConfDeUsuario.getInt(KEY_FUENTE_TAMANIO);
     }
 
-    EditorDeTexto (String archivoRuta, String text, EditorUI editorUI) {
-        this (new File(archivoRuta), text, editorUI);
+    EditorDeTexto (File file, EditorUI editorUI) {
+        this (file, 0, editorUI);
     }
 
-    public EditorDeTexto (File file, String text, final EditorUI editorUI) {
+    EditorDeTexto(File file, int poscCursor, final EditorUI editorUI) {
         setLayout(new GridBagLayout());
 
         this.editorUI = editorUI;
@@ -86,14 +86,8 @@ public class EditorDeTexto extends JPanel {
         String actionName = RSyntaxTextAreaEditorKit.rstaPossiblyInsertTemplateAction;
         map.put(ks, actionName);
 
-        if (text == null) {
-            textArea.setText("inicio\n\tcls()\n\t\nfin"); //Texto que tendra por defecto.
-            textArea.setCaretPosition(17); //Se configura la posición del cursor.
-
-        } else {
-            textArea.setText(text);
-            textArea.setCaretPosition(0);
-        }
+        textArea.setText(LeerArchivo.leer(file));
+        textArea.setCaretPosition(poscCursor);
         textArea.requestFocus();
 
         textArea.addCaretListener(e -> {
@@ -189,11 +183,11 @@ public class EditorDeTexto extends JPanel {
         textArea.selectAll();
     }
 
-    public File getFile() {
+    File getFile() {
         return file;
     }
 
-    public void setFile(File file) {
+    void setFile(File file) {
         this.file = file;
     }
 
