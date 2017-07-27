@@ -1,7 +1,10 @@
-¿Que es Rabbit?
-===============
+# ¿Que es Rabbit?
+Rabbit es un editor de texto libre, diseñado para proporcionar un ambiente agradable para la creación de programas utilizando el lenguaje de programación [SL].
 
-Rabbit es un editor de texto libre para el lenguaje de programación [SL]. Que brinda un ambiente mucho más agradable para la creación de programas con el lenguaje [SL].
+![](https://cldup.com/kMHrL9Fj5W.png)
 
+## Requisitos
+- [Java 7] o superior.
+
+[Java 7]:http://www.oracle.com/technetwork/es/java/javase/downloads/index.html
 [SL]:http://www.cnc.una.py/sl
-![](https://cldup.com/ZpamjcUPur.png)
