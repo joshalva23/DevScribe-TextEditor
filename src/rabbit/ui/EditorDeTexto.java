@@ -274,6 +274,10 @@ public class EditorDeTexto extends JPanel {
         scroll.getGutter().setLineNumberFont(font);
     }
 
+    JComponent getComponent () {
+        return textArea;
+    }
+
     private CodeTemplate[] getCodeTemplate() {
         CodeTemplate[] ct = {
                 new StaticCodeTemplate("dh", "desde ", " = 1 hasta 10 {\n\t\n}"),
