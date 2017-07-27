@@ -98,7 +98,12 @@ public class EditorUI extends JFrame {
 
         setVisible(true);
 
-        SwingUtilities.invokeLater(this::restaurarArchivosAbiertos);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                restaurarArchivosAbiertos();
+            }
+        });
     }
 
     private void restaurarArchivosAbiertos () {

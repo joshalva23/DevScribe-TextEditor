@@ -29,6 +29,10 @@ import rabbit.io.ConfDeUsuario;
 import rabbit.io.LeerArchivo;
 
 import javax.swing.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -90,14 +94,20 @@ public class EditorDeTexto extends JPanel {
         textArea.setCaretPosition(poscCursor);
         textArea.requestFocus();
 
-        textArea.addCaretListener(e -> {
-            actualizarPosCursor(textArea.getCaretPosition());
-            EditorDeTexto.this.editorUI.actualizarMenuItem (textArea.canUndo(), textArea.canRedo());
+        textArea.addCaretListener(new CaretListener() {
+            @Override
+            public void caretUpdate(CaretEvent e) {
+                actualizarPosCursor(textArea.getCaretPosition());
+                EditorDeTexto.this.editorUI.actualizarMenuItem (textArea.canUndo(), textArea.canRedo());
+            }
         });
 
-        textArea.getDocument().addUndoableEditListener(e ->
-            EditorDeTexto.this.editorUI.actualizarMenuItem (textArea.canUndo(), textArea.canRedo())
-        );
+        textArea.getDocument().addUndoableEditListener(new UndoableEditListener() {
+            @Override
+            public void undoableEditHappened(UndoableEditEvent e) {
+                EditorDeTexto.this.editorUI.actualizarMenuItem (textArea.canUndo(), textArea.canRedo());
+            }
+        });
 
         confPanelEditor();
         actualizarTema(ConfDeUsuario.getString(KEY_TEMA));
