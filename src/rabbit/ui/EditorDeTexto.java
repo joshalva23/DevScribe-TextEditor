@@ -37,9 +37,7 @@ import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 import static rabbit.io.ConfDeUsuario.*;
 
@@ -266,9 +264,8 @@ public class EditorDeTexto extends JPanel {
 
     void actualizarTema(String nombreTema) {
         try {
-            String ruta = "src/rabbit/theme/" + nombreTema + ".xml";
-
-            Theme theme = Theme.load(new FileInputStream(ruta));
+            InputStream in = getClass().getResourceAsStream("/rabbit/theme/" + nombreTema + ".xml");
+            Theme theme = Theme.load(in);
             theme.apply(textArea);
             actualizarFuente();
 
