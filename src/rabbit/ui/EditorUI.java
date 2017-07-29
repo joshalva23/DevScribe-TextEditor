@@ -22,11 +22,10 @@ import rabbit.io.ConfDeUsuario;
 import rabbit.io.EscribeArchivo;
 import rabbit.io.LeerArchivo;
 import rabbit.util.EstadoArchivo;
-
-import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -34,9 +33,10 @@ import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static rabbit.io.ConfDeUsuario.*;
 
@@ -643,6 +643,11 @@ public class EditorUI extends JFrame {
         return CuadroDeDialogo.mostrar(this, message, "Recargar archivo", bt, CuadroDeDialogo.INFORMACION);
     }
 
+    private void mostrarDialogoNoSePudoAbrirArchivo () {
+        CuadroDeDialogo.mostrar(this, "No se pudo abrir el archivo.", "Error",
+                new String [] {"Aceptar"}, CuadroDeDialogo.ERROR);
+    }
+
     private void nuevoArchivo () {
         ventInternaActivada = true;
         EscribeArchivo writer = new EscribeArchivo(this);
@@ -737,16 +742,16 @@ public class EditorUI extends JFrame {
     private void cargarDocumentacion () {
         try {
             Desktop.getDesktop().open(new File ("src/rabbit/recurso/documentacion.html"));
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (Exception e) {
+            mostrarDialogoNoSePudoAbrirArchivo();
         }
     }
 
     private void metodoAbreviadoDeTeclados () {
         try {
             Desktop.getDesktop().open(new File ("src/rabbit/recurso/atajo_de_teclado.pdf"));
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (Exception e) {
+            mostrarDialogoNoSePudoAbrirArchivo();
         }
     }
 
