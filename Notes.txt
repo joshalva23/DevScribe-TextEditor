@@ -1,5 +1,0 @@
-1. Editor UI:
-When an object is created of this class, its constuctor is called which does the following:
-loads the UI and the text editor (has methods to load the toolbar, menu bar and the text editor)
-has methods that handles editor keyboard, mouse click events. 
-implements the ActionListener interface to listen for these events.
