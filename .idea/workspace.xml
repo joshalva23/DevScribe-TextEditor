@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="988b6cd3-0aa8-4977-8bc0-417c620fcb97" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/rsyntaxtextarea_2_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DevScribe.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/io/ConfDeUsuario.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/io/EscribeArchivo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/io/FiltroDeArchivo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/io/LeerArchivo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/recurso/atajo_de_teclado.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/recurso/documentacion.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/recurso/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/theme/darcula.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/theme/dark.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/theme/darkii.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/theme/default-alt.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/theme/default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/theme/eclipse.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/theme/idle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/theme/intelli-j.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/theme/monokai.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/theme/vs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/AcercaDeRabbit.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/CuadroDeDialogo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/DialogoGuardarVarios.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/EditorDeTexto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/EditorUI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/SLTokenMaker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/abrir.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/archivo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/ayuda.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/c1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/c2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/copiar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/cortar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/deshacer.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/dialogoAdvertencia.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/dialogoError.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/dialogoPreg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/guardarTodo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/pegar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/rabbit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/rehacer.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/zoomAum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/ui/icono/zoomDism.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rabbit/util/EstadoArchivo.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2VIP5DFfMxWk2QWukdIxZJGNPF0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="988b6cd3-0aa8-4977-8bc0-417c620fcb97" name="Changes" comment="" />
+      <created>1694520439520</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1694520439520</updated>
+      <workItem from="1694520440842" duration="55000" />
+      <workItem from="1694520523889" duration="518000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
