@@ -1,5 +1,5 @@
 # What is DevScribe?
-DevScribe is a free text editor, designed to provide a friendly environment for creating programs using the programming language.
+DevScribe is a free text editor, designed to provide a friendly environment for creating programs.
 
 ![](https://github.com/gauravhegade/Rabbit/blob/master/snapshot.png)
 
