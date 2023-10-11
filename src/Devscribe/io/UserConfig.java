@@ -170,6 +170,7 @@ public class UserConfig {
                 String filePath;
                 while ((filePath = reader.readLine()) != null)
                     list.add(filePath);
+                reader.close();
 
             } catch (IOException e) {
                 e.printStackTrace();

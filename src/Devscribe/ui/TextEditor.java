@@ -318,9 +318,9 @@ public class TextEditor extends JPanel {
 
     private CodeTemplate[] getCodeTemplates() {
         CodeTemplate[] ct = {
-                new StaticCodeTemplate("for", "for (int i = 0; i < ", "; i++) {\n\t\n}"),
-                new StaticCodeTemplate("while", "while (", ") {\n\t\n}"),
-                new StaticCodeTemplate("pf", "printf(", ");"),
+                new StaticCodeTemplate("for", "for (int i = 0; i < n", "; i++) {\n\t;\n}"),
+                new StaticCodeTemplate("while", "while (", ") {\n\t;\n}"),
+                new StaticCodeTemplate("pf", "printf(\"\"", ");"),
                 new StaticCodeTemplate("sf", "scanf(", ");"),
                 new StaticCodeTemplate("if", "if (", ") {\n\t\n}"),
                 new StaticCodeTemplate("ie", "if (", ") {\n\t\n}else{\n\t\n}"),

@@ -34,8 +34,7 @@ public class EditorUI extends JFrame {
             jMenuItemDecreaseFont, jMenuItemOriginalSize;
     private JCheckBoxMenuItem jCheckBoxGuidesIndentation, jCheckBoxLineNumbers, jCheckBoxToolBar, jCheckBoxWordWrap;
 
-    private JButton jButtonNewFile, jButtonSaveAll, jButtonRedo, jButtonUndo, jButtonCopy, jButtonPaste, jButtonCut,
-            jButtonOpenNewFile;
+    private JButton jButtonNewFile, jButtonSaveAll, jButtonRedo, jButtonUndo, jButtonCopy, jButtonPaste, jButtonCut, jButtonOpenNewFile;
 
     private MenuItemEvents menuItemEvents;
 
